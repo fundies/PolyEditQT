@@ -1,0 +1,51 @@
+{
+   /usr/lib/libQt5Gui.so.5.4.2[Memcheck:Cond]
+   Memcheck:Cond
+   obj:/usr/lib/libQt5Gui.so.5.4.2
+   fun:_ZN22QGuiApplicationPrivate4initEv
+   fun:_ZN12QApplicationC1ERiPPci
+   fun:main
+}
+{
+   malloc[Memcheck:Leak]
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_memdup
+   obj:/usr/lib/libgobject-2.0.so.0.4400.1
+   fun:g_type_class_ref
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/libQt5Widgets.so.5.4.2
+   obj:/usr/lib/libQt5Widgets.so.5.4.2
+   fun:_ZN13QStyleFactory6createERK7QString
+   fun:_ZN12QApplication5styleEv
+   fun:_ZN19QApplicationPrivate10initializeEv
+   fun:_ZN19QApplicationPrivate9constructEv
+   fun:main
+}
+{
+   malloc[Memcheck:Leak]
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   obj:/usr/lib/libgobject-2.0.so.0.4400.1
+   obj:/usr/lib/libgobject-2.0.so.0.4400.1
+   obj:/usr/lib/libgobject-2.0.so.0.4400.1
+   obj:/usr/lib/libgobject-2.0.so.0.4400.1
+   fun:g_type_add_interface_static
+   fun:atk_no_op_object_get_type
+   fun:atk_no_op_object_new
+   obj:/usr/lib/libgtk-x11-2.0.so.0.2400.28
+   fun:gtk_tool_button_set_label
+   obj:/usr/lib/libgobject-2.0.so.0.4400.1
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/libQt5Widgets.so.5.4.2
+   fun:_ZN13QStyleFactory6createERK7QString
+   fun:_ZN12QApplication5styleEv
+   fun:_ZN19QApplicationPrivate10initializeEv
+   fun:_ZN19QApplicationPrivate9constructEv
+   fun:main
+}
