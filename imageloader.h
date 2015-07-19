@@ -30,7 +30,8 @@ private:
     int mSpnX;
     int mSpnY;
 
-    Sprite *spr;
+    Sprite *mSpr;
+    Sprite *mCheckers;
 
 };
 

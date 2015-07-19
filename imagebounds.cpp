@@ -2,10 +2,15 @@
 
 #include <QLabel>
 #include <QGridLayout>
+#include <QPushButton>
 
 ImageBounds::ImageBounds(QWidget *parent) : QWidget(parent)
 {
     QGridLayout* layout = new QGridLayout();
+    layout->setSizeConstraint(QLayout::SetFixedSize);
+
+    ///Todo: make this align top
+    layout->setAlignment(Qt::AlignTop);
     setLayout(layout);
 
     layout->addWidget(new QLabel("Rows: ", this, 0),0,0);
@@ -14,17 +19,16 @@ ImageBounds::ImageBounds(QWidget *parent) : QWidget(parent)
     layout->addWidget(new QLabel("Y Seperation: ", this, 0),3,0);
 
     spnRows = new QSpinBox(this);
-    spnRows->setMinimum(1);
-
     spnColumns = new QSpinBox(this);
-    spnColumns->setMinimum(1);
-
-    spnX = new QSpinBox(this);
-    spnY = new QSpinBox(this);
+    spnXsep = new QSpinBox(this);
+    spnYsep = new QSpinBox(this);
 
     layout->addWidget(spnRows,0,1);
     layout->addWidget(spnColumns,1,1);
-    layout->addWidget(spnX,2,1);
-    layout->addWidget(spnY,3,1);
+    layout->addWidget(spnXsep,2,1);
+    layout->addWidget(spnYsep,3,1);
+
+    layout->addWidget(new QPushButton("Import", this), 4,0);
+    layout->addWidget(new QPushButton("Cancel", this), 4,1);
 }
 

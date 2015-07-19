@@ -8,22 +8,23 @@ class Sprite
 {
 public:
 
+    Sprite();
     Sprite(QImage &image);
-
-    //Grid boxes;
-    //void setBoxBounds(unsigned int rows, unsigned int columns, unsigned int xsep, unsigned int ysep);
+    Sprite(QImage &image, int w, int h);
 
     void setFlip(bool x, bool y);
+    void setSize(int w, int h);
     void move(int x, int y);
     void setHotspot(int x, int y);
     void scale(float x, float y);
     void scale(float scale);
-    //void setImage(std::shared_ptr<Image> &image);
     void render();
     void rotate(int angle);
 
-    //const wxSize getSize();
-    //const wxSize getTextureSize();
+    int width() const;
+    int height() const;
+
+    Coordinate hotspot() const;
 
 private:
     Coordinate mPosition;
@@ -40,8 +41,9 @@ private:
 
     int xOff;
     int yOff;
-    int width;
-    int height;
+
+    int mWidth;
+    int mHeight;
 
 };
 

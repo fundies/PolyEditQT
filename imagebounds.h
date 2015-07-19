@@ -9,10 +9,12 @@ class ImageBounds : public QWidget
     Q_OBJECT
 public:
     explicit ImageBounds(QWidget *parent = 0);
-    QSpinBox *spnRows;
+
     QSpinBox *spnColumns;
-    QSpinBox *spnX;
-    QSpinBox *spnY;
+    QSpinBox *spnRows;
+
+    QSpinBox *spnXsep;
+    QSpinBox *spnYsep;
 };
 
 #endif // IMAGEBOUNDS_H

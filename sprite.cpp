@@ -1,9 +1,8 @@
 #include "sprite.h"
 #include <iostream>
 
-Sprite::Sprite(QImage &image)
+Sprite::Sprite()
 {
-
     mPosition = Coordinate(0,0);
 
     mAngle=0;
@@ -14,24 +13,29 @@ Sprite::Sprite(QImage &image)
     xflip=false;
     yflip=false;
 
-    mTexture = new QOpenGLTexture(QImage("/home/greg/mario.png"));
-
     xOff = 0;
     yOff = 0;
 
-    width = mTexture->width();
-    height = mTexture->height();
+}
 
-    mHotspot = Coordinate(width/2, height/2);
+Sprite::Sprite(QImage &image) : Sprite()
+{
+    mTexture = new QOpenGLTexture(image);
+    mTexture->setWrapMode(QOpenGLTexture::Repeat);
 
-    //fullRect = false;
-    //subImg = 0;
-    //Rows = 1;
-    //Columns = 1;
-    //Xsep = 0;
-    //Ysep = 0;
-    //m_image->Create(1,1,true);
-    //boxes = Grid(0,0,1,1,0,0);
+    mWidth = mTexture->width();
+    mHeight = mTexture->height();
+    mHotspot = Coordinate(mWidth/2, mHeight/2);
+}
+
+Sprite::Sprite(QImage &image, int w, int h) : Sprite()
+{
+    mTexture = new QOpenGLTexture(image);
+    mTexture->setWrapMode(QOpenGLTexture::Repeat);
+
+    mWidth = w;
+    mHeight = h;
+    mHotspot = Coordinate(mWidth/2, mHeight/2);
 }
 
 void Sprite::setFlip(bool x, bool y)
@@ -64,26 +68,39 @@ void Sprite::scale(float scale)
     yscale=scale;
 }
 
-/*void Sprite::setImage(std::shared_ptr<Image> &image)
+void Sprite::setSize(int w, int h)
 {
-    image=std::move(image);
-}*/
+    mWidth = w;
+    mHeight = h;
+    mHotspot = Coordinate(mWidth/2, mHeight/2);
+}
 
 void Sprite::rotate(int angle)
 {
     mAngle=angle;
 }
+int Sprite::width() const
+{
+    return mWidth;
+}
+int Sprite::height() const
+{
+    return mHeight;
+}
+Coordinate Sprite::hotspot() const
+{
+    return mHotspot;
+}
+
 
 void Sprite::render()
 {
-    //assert(image!=NULL);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_COLOR_MATERIAL);
 
-    glLoadIdentity();
-
-    glTranslatef(0,0,0);
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     if(xscale!=1 || yscale!=1)
     {
@@ -95,36 +112,25 @@ void Sprite::render()
         glRotatef(mAngle, 0,0,1);
     }
 
-    //mTexture = new QOpenGLTexture(QImage("/home/greg/mario.png"));
     mTexture->bind();
 
     glBegin(GL_QUADS);
 
     glTexCoord2f(0, 0);
-    glVertex2f(0, 0);
+    glVertex2f( -mHotspot.rx(), -mHotspot.ry() );
 
-    glTexCoord2f(1, 0);
-    glVertex2f(width, 0);
+    glTexCoord2f(width()/mTexture->width(), 0);
+    glVertex2f( mWidth-mHotspot.rx(), -mHotspot.ry() );
 
-    glTexCoord2f(1, 1);
-    glVertex2f(width, height);
+    glTexCoord2f(width()/mTexture->width(), height()/mTexture->height());
+    glVertex2f( mWidth-mHotspot.rx(), mHeight-mHotspot.ry() );
 
-    glTexCoord2f(0, 1);
-    glVertex2f(0, height);
+    glTexCoord2f(0, height()/mTexture->height());
+    glVertex2f( -mHotspot.rx(), mHeight-mHotspot.ry() );
 
     glEnd();
 
-}
+    glDisable(GL_BLEND);
 
-/*void Sprite::setBoxBounds(unsigned int rows, unsigned int columns, unsigned int xsep, unsigned int ysep)
-{
-    unsigned int width = image->textureWidth;
-    unsigned int height = image->textureHeight;
-    boxes.setSize(width, height, rows, columns, xsep, ysep);
 }
-
-const wxSize Sprite::getTextureSize()
-{
-    return wxSize(image->textureWidth, image->textureHeight);
-}*/
 

@@ -8,6 +8,8 @@
 #include <QSplitter>
 #include <QStatusBar>
 #include <QToolButton>
+#include <QErrorMessage>
+#include <QFileDialog>
 
 #include "masktab.h"
 #include "utility.h"
@@ -151,6 +153,6 @@ void MainWindow::setMask(Table* mask)
 
 void MainWindow::open()
 {
- ImageLoader *img = new ImageLoader(this);
- img->show();
+    QFileDialog *file = new QFileDialog();
+    file->exec();
 }

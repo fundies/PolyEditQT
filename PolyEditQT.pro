@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     imagebounds.cpp \
     glwindow.cpp \
     maincanvas.cpp \
-    sprite.cpp
+    sprite.cpp \
+    checkers.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     imagebounds.h \
     glwindow.h \
     maincanvas.h \
-    sprite.h
+    sprite.h \
+    checkers.h
 
 CONFIG += c++11
 

@@ -1,14 +1,12 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QColorDialog>
+#include <QFileDialog>
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication a(argc, argv);
     MainWindow w;
-    //QColorDialog* c = new QColorDialog();
-    //p->setOptions(QColorDialog::DontUseNativeDialog);
-    //p->show();
     w.show();
 
     return a.exec();
