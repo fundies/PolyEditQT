@@ -3,6 +3,7 @@
 
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QOpenGLWidget>
 #include "cell.h"
 #include "mask.h"
 
@@ -20,7 +21,7 @@ public:
      * @param parent parent
      * @param glParent widget we draw to
      */
-    Table(QWidget *parent, QGLWidget *glParent);
+    Table(QWidget *parent, QOpenGLWidget *glParent);
     ~Table();
 
     /**

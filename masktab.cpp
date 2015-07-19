@@ -11,15 +11,15 @@ MaskTab::MaskTab(MainWindow *parent, Canvas* canvas) : QTabWidget(parent)
     mCanvas = canvas;
 
     setTabsClosable(true);
-    setMovable(true);
+    //setMovable(true);
+
+    addTab();
 
     // Default to mask 0
     mParent->setMask(mTable->value(0));
 
     connect(this, &QTabWidget::tabCloseRequested, this, &MaskTab::closeTab);
     connect(this, &QTabWidget::currentChanged, this, &MaskTab::currentChanged);
-
-    addTab();
 
     // Tab to add tabs
     QTabWidget::addTab(new QWidget(this), "+");

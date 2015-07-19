@@ -8,25 +8,27 @@
  */
 class QActions
 {
+
 public:
     QActions(QWidget *parent);
-    QAction* open;
-    QAction* save;
-    QAction* saveAs;
-    QAction* quit;
-    QAction* cut;
-    QAction* copy;
-    QAction* paste;
-    QAction* viewGrid;
-    QAction* viewSprite;
-    QAction* viewSymmetry;
-    QAction* zoomIn;
-    QAction* zoomOut;
-    QAction* zoom100;
-    QAction* play;
-    QAction* pause;
-    QAction* stop;
-    QAction* about;
+    QAction* aOpen;
+    QAction* aSave;
+    QAction* aSaveAs;
+    QAction* aQuit;
+    QAction* aCut;
+    QAction* aCopy;
+    QAction* aPaste;
+    QAction* aViewGrid;
+    QAction* aViewSprite;
+    QAction* aViewSymmetry;
+    QAction* aZoomIn;
+    QAction* aZoomOut;
+    QAction* aZoom100;
+    QAction* aPlay;
+    QAction* aPause;
+    QAction* aStop;
+    QAction* aAbout;
+
 };
 
 #endif // QACTIONS_H

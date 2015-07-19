@@ -11,16 +11,18 @@
 
 #include "masktab.h"
 #include "utility.h"
+#include "imageloader.h"
+#include "maincanvas.h"
 
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : GLWindow(parent)
 {
     mCoord = Coordinate(0,0);
     mActions = new QActions(this);
     mGrid = new Grid(16, 16, width(), height());
-    mCanvas = new Canvas(this);
+    mCanvas = new MainCanvas(this);
 
     mCentralWidget = new QWidget(this);
 
@@ -54,6 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
     yCoord = new QLabel("Y: ", this, 0);
     statusBar()->addPermanentWidget(xCoord, 0);
     statusBar()->addPermanentWidget(yCoord, 0);
+
+    connect(mActions->aOpen, SIGNAL(triggered()), this, SLOT(open()));
 }
 
 MainWindow::~MainWindow()
@@ -143,4 +147,10 @@ void MainWindow::addCoord(Coordinate c)
 void MainWindow::setMask(Table* mask)
 {
     currentMask = mask;
+}
+
+void MainWindow::open()
+{
+ ImageLoader *img = new ImageLoader(this);
+ img->show();
 }

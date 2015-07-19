@@ -2,7 +2,7 @@
 #define MASK_H
 
 #include <QList>
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include "coordinate.h"
 
 
@@ -30,7 +30,7 @@ public:
      * @brief Mask Constructor
      * @param parent parent
      */
-    Mask(QGLWidget* parent);
+    Mask(QOpenGLWidget* parent);
 
     /**
      * @brief addc add c
@@ -116,7 +116,7 @@ public:
 
 private:
     QList<Coordinate> mcs;
-    QGLWidget* mParent;
+    QOpenGLWidget* mParent;
     int mRadius;
     PolyEdit::Shape mType;
 };

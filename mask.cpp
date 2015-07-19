@@ -2,7 +2,7 @@
 #include "utility.h"
 #include <iostream>
 
-Mask::Mask(QGLWidget* parent)
+Mask::Mask(QOpenGLWidget* parent)
 {
     mParent = parent;
     mRadius = 0;

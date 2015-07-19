@@ -8,19 +8,19 @@ class MainWindow;
 #include <functional>
 #include <QList>
 
-#include "canvas.h"
+#include "glwindow.h"
 #include "qactions.h"
 #include "grid.h"
 #include "table.h"
 
 class MenuBar;
 class ToolBar;
-class Canvas;
+class MainCanvas;
 
 /**
  * @brief The MainWindow class
  */
-class MainWindow : public QMainWindow
+class MainWindow : public GLWindow
 {
     Q_OBJECT
 
@@ -75,6 +75,10 @@ public:
      */
     void setMask(Table* mask);
 
+private slots:
+
+    void open();
+
 private:
 
     /**
@@ -91,6 +95,9 @@ private:
      */
     const Coordinate mapToReal(Coordinate c);
 
+
+    MainCanvas* mCanvas;
+
     double zoom = 1;
 
     Coordinate mCoord;
@@ -99,9 +106,7 @@ private:
     QLabel* yCoord;
 
     QActions* mActions;
-    QWidget* mCentralWidget;
 
-    Canvas* mCanvas;
     Grid* mGrid;
 
     ToolBar* mToolBar;

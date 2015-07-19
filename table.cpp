@@ -5,7 +5,7 @@
 
 #include "utility.h"
 
-Table::Table(QWidget *parent, QGLWidget* glParent) : QTableWidget(parent)
+Table::Table(QWidget *parent, QOpenGLWidget *glParent) : QTableWidget(parent)
 {
     mType = PolyEdit::Polygon;
 

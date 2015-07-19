@@ -5,22 +5,22 @@
 
 ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 {
-    addAction(parent->actions()->open);
+    addAction(parent->actions()->aOpen);
 
     addSeparator();
 
-    addAction(parent->actions()->save);
-    addAction(parent->actions()->saveAs);
+    addAction(parent->actions()->aSave);
+    addAction(parent->actions()->aSaveAs);
 
     addSeparator();
 
-    addAction(parent->actions()->cut);
-    addAction(parent->actions()->copy);
-    addAction(parent->actions()->paste);
+    addAction(parent->actions()->aCut);
+    addAction(parent->actions()->aCopy);
+    addAction(parent->actions()->aPaste);
 
     addSeparator();
 
-    addAction(parent->actions()->viewGrid);
+    addAction(parent->actions()->aViewGrid);
 
     addSeparator();
 
@@ -35,9 +35,9 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 
     addSeparator();
 
-    addAction(parent->actions()->zoomIn);
-    addAction(parent->actions()->zoomOut);
-    addAction(parent->actions()->zoom100);
+    addAction(parent->actions()->aZoomIn);
+    addAction(parent->actions()->aZoomOut);
+    addAction(parent->actions()->aZoom100);
 
     addSeparator();
 
@@ -50,9 +50,9 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 
     addSeparator();
 
-    addAction(parent->actions()->play);
-    addAction(parent->actions()->pause);
-    addAction(parent->actions()->stop);
+    addAction(parent->actions()->aPlay);
+    addAction(parent->actions()->aPause);
+    addAction(parent->actions()->aStop);
     addSeparator();
 
     QSpinBox* frame = new QSpinBox(parent);

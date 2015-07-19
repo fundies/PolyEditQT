@@ -12,12 +12,12 @@ Coordinate::Coordinate(int x, int y, QColor color) : QPoint(x,y)
 
 Coordinate::Coordinate(int x, int y) : QPoint(x,y)
 {
-    Coordinate();
+    mColor = Qt::white;
 }
 
 Coordinate::Coordinate(QPoint p) : QPoint(p.rx(), p.ry())
 {
-    Coordinate();
+    mColor = Qt::white;
 }
 
 Coordinate::Coordinate(QPoint p, QColor color) : QPoint(p.rx(), p.ry())

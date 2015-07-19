@@ -3,58 +3,58 @@
 QActions::QActions(QWidget *parent)
 {
     QPixmap openPix("img/folder_picture.png");
-    open = new QAction(openPix, "&Open", parent);
+    aOpen = new QAction(openPix, "&Open", parent);
 
     QPixmap savePix("img/disk.png");
-    save = new QAction(savePix, "&Save", parent);
+    aSave = new QAction(savePix, "&Save", parent);
 
     QPixmap saveAsPix("img/disk.png");
-    saveAs = new QAction(saveAsPix, "&Save", parent);
+    aSaveAs = new QAction(saveAsPix, "&Save", parent);
 
     QPixmap quitPix("img/door_out.png");
-    quit = new QAction(quitPix, "&Quit", parent);
+    aQuit = new QAction(quitPix, "&Quit", parent);
 
     QPixmap cutPix("img/cut.png");
-    cut = new QAction(cutPix, "&Cut", parent);
+    aCut = new QAction(cutPix, "&Cut", parent);
 
     QPixmap copyPix("img/copy.png");
-    copy = new QAction(copyPix, "&Copy", parent);
+    aCopy = new QAction(copyPix, "&Copy", parent);
 
     QPixmap pastePix("img/paste.png");
-    paste = new QAction(pastePix, "&Paste", parent);
+    aPaste = new QAction(pastePix, "&Paste", parent);
 
     QPixmap gridPix("img/grid.png");
-    viewGrid = new QAction(gridPix, "&Grid", parent);
-    viewGrid->setCheckable(true);
-    viewGrid->setChecked(true);
+    aViewGrid = new QAction(gridPix, "&Grid", parent);
+    aViewGrid->setCheckable(true);
+    aViewGrid->setChecked(true);
 
-    viewSprite = new QAction("Sprite", parent);
-    viewSprite->setCheckable(true);
-    viewSprite->setChecked(true);
+    aViewSprite = new QAction("Sprite", parent);
+    aViewSprite->setCheckable(true);
+    aViewSprite->setChecked(true);
 
-    viewSymmetry = new QAction("Symmetry Hints", parent);
-    viewSymmetry->setCheckable(true);
-    viewSymmetry->setChecked(true);
+    aViewSymmetry = new QAction("Symmetry Hints", parent);
+    aViewSymmetry->setCheckable(true);
+    aViewSymmetry->setChecked(true);
 
     QPixmap zoomInPix("img/zoom_in.png");
-    zoomIn = new QAction(zoomInPix, "&Zoom In", parent);
+    aZoomIn = new QAction(zoomInPix, "&Zoom In", parent);
 
     QPixmap zoomOutPix("img/zoom_out.png");
-    zoomOut = new QAction(zoomOutPix, "&Zoom Out", parent);
+    aZoomOut = new QAction(zoomOutPix, "&Zoom Out", parent);
 
     QPixmap zoom100Pix("img/zoom.png");
-    zoom100 = new QAction(zoom100Pix, "&Actual Size", parent);
+    aZoom100 = new QAction(zoom100Pix, "&Actual Size", parent);
 
     QPixmap aboutPix("img/star.png");
-    about = new QAction(aboutPix, "&About", parent);
+    aAbout = new QAction(aboutPix, "&About", parent);
 
     QPixmap playPix("img/play.png");
-    play = new QAction(playPix, "&Play", parent);
+    aPlay = new QAction(playPix, "&Play", parent);
 
     QPixmap pausePix("img/pause.png");
-    pause = new QAction(pausePix, "&Pause", parent);
+    aPause = new QAction(pausePix, "&Pause", parent);
 
     QPixmap stopPix("img/stoc.png");
-    stop = new QAction(stopPix, "&Stop", parent);
+    aStop = new QAction(stopPix, "&Stop", parent);
 }
 

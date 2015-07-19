@@ -26,7 +26,12 @@ SOURCES += main.cpp\
     maskcombobox.cpp \
     coordinate.cpp \
     utility.cpp \
-    masktab.cpp
+    masktab.cpp \
+    imageloader.cpp \
+    imagebounds.cpp \
+    glwindow.cpp \
+    maincanvas.cpp \
+    sprite.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -41,7 +46,12 @@ HEADERS  += mainwindow.h \
     maskcombobox.h \
     coordinate.h \
     utility.h \
-    masktab.h
+    masktab.h \
+    imageloader.h \
+    imagebounds.h \
+    glwindow.h \
+    maincanvas.h \
+    sprite.h
 
 CONFIG += c++11
 

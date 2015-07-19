@@ -3,17 +3,11 @@
 
 #include <QMouseEvent>
 
-Canvas::Canvas(MainWindow *parent)
-    : QGLWidget(QGLFormat(), parent)
+Canvas::Canvas(GLWindow *parent)
+    : QOpenGLWidget(parent)
 {
     // Store the MainWindow* for later use
     mParent = parent;
-
-    // Intialize mouse position
-    mousePos = Coordinate(0,0);
-
-    // Enable mouse events
-    setMouseTracking(true);
 }
 
 Canvas::~Canvas()
@@ -34,7 +28,7 @@ QSize Canvas::sizeHint() const
 void Canvas::initializeGL()
 {
     // Clear the canvas
-    qglClearColor(Qt::black);
+    //qglClearColor(Qt::black);
 }
 
 void Canvas::paintGL()
@@ -78,14 +72,4 @@ void Canvas::draw(const std::function<void(void)> &f, int x, int y)
     glTranslatef(x, y, 0);
     f();
     update();
-}
-
-void Canvas::mouseMoveEvent(QMouseEvent * event)
-{
-    mousePos = event->pos();
-}
-
-void Canvas::mousePressEvent(QMouseEvent * event)
-{
-    mParent->addCoord(mParent->getStatusCoord());
 }

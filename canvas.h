@@ -1,16 +1,19 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "mainwindow.h"
 #include "coordinate.h"
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <functional>
+
+#include "glwindow.h"
+
+class GLWindow;
 
 /**
  * @brief The Canvas class
  */
-class Canvas : public QGLWidget
+class Canvas : public QOpenGLWidget
 {
 public:
 
@@ -18,7 +21,7 @@ public:
      * @brief Canvas Canvas used for drawing
      * @param parent parent
      */
-    explicit Canvas(MainWindow *parent = 0);
+    explicit Canvas(GLWindow *parent = 0);
     ~Canvas();
 
     /**
@@ -27,59 +30,42 @@ public:
      * @param x x offset
      * @param y y offset
      */
-    void draw(const std::function<void(void)> &f, int x, int y);
-
-    /**
-     * @brief mousePos the mouse position relative to the canvas
-     */
-    Coordinate mousePos;
+    virtual void draw(const std::function<void(void)> &f, int x, int y);
 
 protected:
 
     /**
      * @brief initializeGL Intialize OpenGL
      */
-    void initializeGL();
+    virtual void initializeGL();
 
     /**
      * @brief paintGL Paint the canvas
      */
-    void paintGL();
+    virtual void paintGL();
 
     /**
      * @brief resizeGL Canvas resized event
      * @param width new width
      * @param height new height
      */
-    void resizeGL(int width, int height);
-
-    /**
-     * @brief mouseMoveEvent Mouse moved event
-     * @param event event
-     */
-    void mouseMoveEvent(QMouseEvent * event);
-
-    /**
-     * @brief mousePressEvent Mouse Pressed event
-     * @param event event
-     */
-    void mousePressEvent(QMouseEvent * event);
+    virtual void resizeGL(int width, int height);
 
     /**
      * @brief minimumSizeHint Returns the minimum size allowed
      * @return minimum size
      */
-    QSize minimumSizeHint() const;
+    virtual QSize minimumSizeHint() const;
 
     /**
      * @brief sizeHint Returns the suggested size
      * @return suggested size
      */
-    QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 private:
 
-    MainWindow *mParent;
+    GLWindow *mParent;
 };
 
 #endif // CANVAS_H
