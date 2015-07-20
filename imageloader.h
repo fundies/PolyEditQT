@@ -10,7 +10,7 @@ class ImageLoader : public GLWindow
 {
     Q_OBJECT
 public:
-    explicit ImageLoader(QWidget *parent = 0);
+    ImageLoader(QWidget *parent, QImage &image);
     void canvasResized(int w, int h);
 
 private:

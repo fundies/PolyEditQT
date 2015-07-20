@@ -1,14 +1,16 @@
 #include <QHBoxLayout>
+#include <QScrollArea>
 #include <iostream>
 
 #include "imageloader.h"
 #include "imagebounds.h"
 #include "checkers.h"
 
-ImageLoader::ImageLoader(QWidget *parent) : GLWindow(parent)
+ImageLoader::ImageLoader(QWidget *parent, QImage &image) : GLWindow(parent)
 {
     mCentralWidget = new QWidget(this);
-    this->setCentralWidget(mCentralWidget);
+    setCentralWidget(mCentralWidget);
+
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setMargin(0);
     mCentralWidget->setLayout(mainLayout);
@@ -17,7 +19,10 @@ ImageLoader::ImageLoader(QWidget *parent) : GLWindow(parent)
     mainLayout->addWidget(bounds);
 
     mCanvas = new Canvas(this);
-    mainLayout->addWidget(mCanvas);
+    mCanvas->setMinimumSize(image.width(), image.height());
+    QScrollArea* scrollArea = new QScrollArea;
+    scrollArea->setWidget(mCanvas);
+    mainLayout->addWidget(scrollArea);
 
     mSpnRows = 1;
     mSpnColumns = 1;
@@ -32,9 +37,7 @@ ImageLoader::ImageLoader(QWidget *parent) : GLWindow(parent)
     QImage checkers = createCheckers();
     mCheckers = new Sprite(checkers, width(), height());
 
-    QImage img = QImage("/home/greg/mario.png");
-    mSpr = new Sprite(img);
-
+    mSpr = new Sprite(image);
     mGrid = new Grid(mSpr->width(), mSpr->height(), 1, 1, 0, 0);
 }
 

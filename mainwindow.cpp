@@ -153,6 +153,27 @@ void MainWindow::setMask(Table* mask)
 
 void MainWindow::open()
 {
-    QFileDialog *file = new QFileDialog();
-    file->exec();
+    QFileDialog *file = new QFileDialog(this);
+    file->setOption(QFileDialog::DontUseNativeDialog, true);
+
+    QStringList mimeTypeFilters;
+    mimeTypeFilters
+            << "image/ *"
+            << "image/bmp"
+            << "image/jpeg"
+            << "image/png"
+            << "application/octet-stream"; // will show "All files (*)"
+
+    file->setMimeTypeFilters(mimeTypeFilters);
+
+    QStringList fileNames;
+    if (file->exec())
+        fileNames = file->selectedFiles();
+
+    QImage img = QImage(fileNames[0]);
+    if (!img.isNull())
+    {
+        ImageLoader* imgLoader = new ImageLoader(this, img);
+        imgLoader->show();
+    }
 }
