@@ -24,13 +24,15 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 
     addSeparator();
 
-    QSpinBox* gridX = new QSpinBox(parent);
+    gridX = new QSpinBox(parent);
     gridX->setPrefix("X: ");
+    gridX->setValue(16);
     addWidget(gridX);
     addSeparator();
 
-    QSpinBox* gridY = new QSpinBox(parent);
+    gridY = new QSpinBox(parent);
     gridY->setPrefix("Y: ");
+    gridY->setValue(16);
     addWidget(gridY);
 
     addSeparator();
@@ -41,7 +43,7 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 
     addSeparator();
 
-    QDoubleSpinBox* speed = new QDoubleSpinBox(parent);
+    speed = new QDoubleSpinBox(parent);
     speed->setPrefix("Speed: ");
     speed->setDecimals(3);
     speed->setSingleStep(0.001);
@@ -55,7 +57,7 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
     addAction(parent->actions()->aStop);
     addSeparator();
 
-    QSpinBox* frame = new QSpinBox(parent);
+    frame = new QSpinBox(parent);
     frame->setPrefix("Frame: ");
     addWidget(frame);
 }

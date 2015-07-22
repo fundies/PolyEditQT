@@ -100,9 +100,12 @@ public:
      */
     void render();
 
+    void setAlwaysVisible(bool value);
+
 private:
 
     QList<Coordinate> mcs;
+    bool alwaysVisible;
 
     int mXsep = 0;
     int mYSep = 0;

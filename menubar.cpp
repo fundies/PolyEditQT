@@ -16,7 +16,7 @@ MenuBar::MenuBar(MainWindow *parent) : QMenuBar(parent)
     editMenu->addAction(parent->actions()->aCopy);
     editMenu->addAction(parent->actions()->aPaste);
     editMenu->addSeparator();
-    //editMenu->addAction(parent->actions()->"Sprite");
+    editMenu->addAction(parent->actions()->aSprite);
     //editMenu->addAction(parent->actions()->"Animation");
     addMenu(editMenu);
 

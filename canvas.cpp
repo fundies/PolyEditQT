@@ -22,7 +22,7 @@ QSize Canvas::minimumSizeHint() const
 
 QSize Canvas::sizeHint() const
 {
-    return QSize(800, 500);
+    return QSize(200, 200);
 }
 
 void Canvas::initializeGL()

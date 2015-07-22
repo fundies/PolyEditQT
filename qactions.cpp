@@ -23,6 +23,8 @@ QActions::QActions(QWidget *parent)
     QPixmap pastePix("img/paste.png");
     aPaste = new QAction(pastePix, "&Paste", parent);
 
+    aSprite = new QAction("Sprite", parent);
+
     QPixmap gridPix("img/grid.png");
     aViewGrid = new QAction(gridPix, "&Grid", parent);
     aViewGrid->setCheckable(true);

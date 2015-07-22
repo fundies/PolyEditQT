@@ -15,6 +15,12 @@ public:
      * @param parent parent
      */
     ToolBar(MainWindow *parent);
+
+    QSpinBox* gridX;
+    QSpinBox* gridY;
+    QSpinBox* frame;
+    QDoubleSpinBox* speed;
+
 };
 
 #endif // TOOLBAR_H

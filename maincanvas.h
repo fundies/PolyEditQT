@@ -16,6 +16,8 @@ public:
      */
     Coordinate mousePos;
 
+    QSize sizeHint() const;
+
 private:
 
     /**

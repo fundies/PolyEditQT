@@ -7,15 +7,20 @@ class MainWindow;
 #include <QLabel>
 #include <functional>
 #include <QList>
+#include <QSharedPointer>
+#include <QTimer>
 
+#include "sprite.h"
 #include "glwindow.h"
 #include "qactions.h"
 #include "grid.h"
 #include "table.h"
+#include "imageloader.h"
 
 class MenuBar;
 class ToolBar;
 class MainCanvas;
+class ImageLoader;
 
 /**
  * @brief The MainWindow class
@@ -75,9 +80,24 @@ public:
      */
     void setMask(Table* mask);
 
+    void setSpr(const QSharedPointer<Sprite> &spr);
+
 private slots:
 
     void open();
+    void play();
+    void pause();
+    void stop();
+    void incrementSubimg();
+    void editSprite();
+    void viewGrid(bool value);
+    void viewSprite(bool value);
+    void zoomIn();
+    void zoomOut();
+    void zoom100();
+    void updateGrid();
+    void setXsep(int value);
+    void setYsep(int value);
 
 private:
 
@@ -95,10 +115,22 @@ private:
      */
     const Coordinate mapToReal(Coordinate c);
 
+    void setZoom(double factor);
+
+    QTimer *mTimer;
+    unsigned int subImg;
+    bool mViewGrid;
+    bool mViewSprite;
+    int mXsep;
+    int mYsep;
+
+    ImageLoader* imgLoader;
 
     MainCanvas* mCanvas;
+    QSharedPointer<Sprite> mSpr;
 
     double zoom = 1;
+    double zoomLast = 1;
 
     Coordinate mCoord;
 

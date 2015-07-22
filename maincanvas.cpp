@@ -22,3 +22,8 @@ void MainCanvas::mousePressEvent(QMouseEvent * event)
     if (event->button() == Qt::LeftButton)
         mParent->addCoord(mParent->getStatusCoord());
 }
+
+QSize MainCanvas::sizeHint() const
+{
+    return QSize(800, 480);
+}

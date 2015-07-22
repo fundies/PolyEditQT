@@ -12,6 +12,7 @@ public:
     Sprite(QImage &image);
     Sprite(QImage &image, int w, int h);
 
+    void setAlpha(const QColor &color);
     void setFlip(bool x, bool y);
     void setSize(int w, int h);
     void move(int x, int y);
@@ -19,7 +20,11 @@ public:
     void scale(float x, float y);
     void scale(float scale);
     void render();
+    void render(int subimg);
     void rotate(int angle);
+    void setOrigTexture(bool value);
+    size_t genSubimg(unsigned int rows, unsigned int columns, unsigned int xsep, unsigned int ysep);
+    size_t count();
 
     int width() const;
     int height() const;
@@ -34,7 +39,11 @@ private:
     float xscale;
     float yscale;
 
-    QOpenGLTexture *mTexture;
+    bool origTexture;
+    QOpenGLTexture *mTexture[2];
+    QImage mImage[2];
+
+    QList<QPair<QImage, QOpenGLTexture*>> mSubimg;
 
     bool xflip;
     bool yflip;

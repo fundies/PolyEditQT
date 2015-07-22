@@ -4,11 +4,13 @@
 
 Grid::Grid(int xSep, int ySep, int canvasW, int canvasH)
 {
+    alwaysVisible = false;
     setSize(0, 0, xSep, ySep, canvasW, canvasH, 1);
 }
 
 Grid::Grid(unsigned int width, unsigned int height, unsigned int rows, unsigned int columns, unsigned int xSep, unsigned int ySep)
 {
+    alwaysVisible = false;
     setSize(width, height, rows, columns, xSep, ySep);
 }
 
@@ -124,7 +126,11 @@ void Grid::render()
 {
     // Alpha
     glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    if (alwaysVisible)
+        glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
+    else
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glDisable(GL_TEXTURE_2D);
     glBegin(GL_LINES);
@@ -143,4 +149,9 @@ void Grid::render()
 
     glDisable(GL_BLEND);
 }
+void Grid::setAlwaysVisible(bool value)
+{
+    alwaysVisible = value;
+}
+
 
