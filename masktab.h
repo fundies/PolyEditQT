@@ -21,6 +21,7 @@ public:
      * @param canvas canvas
      */
     MaskTab(MainWindow *parent, Canvas *canvas);
+    ~MaskTab();
 
     /**
      * @brief tabBar override tabBar() to enable colored headers

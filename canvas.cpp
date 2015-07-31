@@ -1,13 +1,54 @@
-#include "canvas.h"
 #include <GL/glu.h>
 
 #include <QMouseEvent>
+//#include <iostream>
 
-Canvas::Canvas(GLWindow *parent)
+#include "canvas.h"
+//#include "mainwindow.h"
+//#include "imageloader.h"
+
+Canvas::Canvas(AnimationFrame *parent)
+    : QOpenGLWidget(parent)
+{
+    // we don't need the mainW here
+    mMainW = Q_NULLPTR;
+    mWin = parent;
+
+
+    // Intialize mouse position
+    mousePos = Coordinate(0,0);
+
+    // we don't need mouse events here
+    setMouseTracking(false);
+}
+
+Canvas::Canvas(ImageFrame *parent)
+    : QOpenGLWidget(parent)
+{
+    // we don't need the mainW here
+    mMainW = Q_NULLPTR;
+    mWin = parent;
+
+
+    // Intialize mouse position
+    mousePos = Coordinate(0,0);
+
+    // we don't need mouse events here
+    setMouseTracking(false);
+}
+
+Canvas::Canvas(MainWindow *parent)
     : QOpenGLWidget(parent)
 {
     // Store the MainWindow* for later use
-    mParent = parent;
+    mMainW = parent;
+    mWin = parent;
+
+    // Intialize mouse position
+    mousePos = Coordinate(0,0);
+
+    // Enable mouse events
+    setMouseTracking(true);
 }
 
 Canvas::~Canvas()
@@ -20,15 +61,11 @@ QSize Canvas::minimumSizeHint() const
     return QSize(50, 50);
 }
 
-QSize Canvas::sizeHint() const
-{
-    return QSize(200, 200);
-}
-
 void Canvas::initializeGL()
 {
-    // Clear the canvas
-    //qglClearColor(Qt::black);
+    // Black background
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Canvas::paintGL()
@@ -49,7 +86,7 @@ void Canvas::paintGL()
     glLoadIdentity();
 
     // All drawing should be called from MainWindow->render()
-    mParent->render();
+    mWin->render();
 }
 
 void Canvas::resizeGL(int width, int height)
@@ -59,7 +96,7 @@ void Canvas::resizeGL(int width, int height)
      * so that the grid can be resized inorder
      * to compensate
     */
-    mParent->canvasResized(width, height);
+    mWin->canvasResized(width, height);
 
     // We need to repaint on resize
     paintGL();
@@ -73,3 +110,28 @@ void Canvas::draw(const std::function<void(void)> &f, int x, int y)
     f();
     update();
 }
+
+QSize Canvas::sizeHint() const
+{
+    if (mMainW != Q_NULLPTR)
+        return QSize(800, 480);
+    else
+        return QSize(600, 250);
+
+}
+
+void Canvas::mouseMoveEvent(QMouseEvent * event)
+{
+    if (mMainW != Q_NULLPTR)
+        mousePos = event->pos();
+}
+
+void Canvas::mousePressEvent(QMouseEvent * event)
+{
+    if (mMainW != Q_NULLPTR)
+    {
+        if (event->button() == Qt::LeftButton)
+            mMainW->addCoord(mMainW->getStatusCoord());
+    }
+}
+

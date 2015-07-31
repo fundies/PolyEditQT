@@ -14,11 +14,11 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 
     addSeparator();
 
-    addAction(parent->actions()->aCut);
-    addAction(parent->actions()->aCopy);
-    addAction(parent->actions()->aPaste);
+    //addAction(parent->actions()->aCut);
+    //addAction(parent->actions()->aCopy);
+    //addAction(parent->actions()->aPaste);
 
-    addSeparator();
+    //addSeparator();
 
     addAction(parent->actions()->aViewGrid);
 
@@ -43,6 +43,12 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 
     addSeparator();
 
+    addAction(parent->actions()->aPlay);
+    addAction(parent->actions()->aPause);
+    addAction(parent->actions()->aStop);
+
+    addSeparator();
+
     speed = new QDoubleSpinBox(parent);
     speed->setPrefix("Speed: ");
     speed->setDecimals(3);
@@ -50,11 +56,6 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
     speed->setAccelerated(true);
     addWidget(speed);
 
-    addSeparator();
-
-    addAction(parent->actions()->aPlay);
-    addAction(parent->actions()->aPause);
-    addAction(parent->actions()->aStop);
     addSeparator();
 
     frame = new QSpinBox(parent);

@@ -1,8 +1,18 @@
 #include "sprite.h"
+#include "canvas.h"
+
 #include <iostream>
 
+#include <QOpenGLContext>
+#include <QDebug>
+
+SubImage::SubImage(QImage image) {
+    tex = QSharedPointer<QOpenGLTexture>(new QOpenGLTexture(image));
+    img = image;
+}
+
 Sprite::Sprite()
-{
+{   
     origTexture = true;
     mPosition = Coordinate(0,0);
 
@@ -16,25 +26,22 @@ Sprite::Sprite()
 
     xOff = 0;
     yOff = 0;
-
 }
 
 Sprite::Sprite(QImage &image) : Sprite()
 {
     mImage[0] = image;
-    mTexture[0] = new QOpenGLTexture(image);
-    mTexture[0]->setWrapMode(QOpenGLTexture::Repeat);
+    mTexture[0] = SubImagePtr(new SubImage(image));
 
-    mWidth = mTexture[0]->width();
-    mHeight = mTexture[0]->height();
+    mWidth = image.width();
+    mHeight = image.height();
     mHotspot = Coordinate(mWidth/2, mHeight/2);
 }
 
 Sprite::Sprite(QImage &image, int w, int h) : Sprite()
 {
     mImage[0] = image;
-    mTexture[0] = new QOpenGLTexture(image);
-    mTexture[0]->setWrapMode(QOpenGLTexture::Repeat);
+    mTexture[0] = SubImagePtr(new SubImage(image));
 
     mWidth = w;
     mHeight = h;
@@ -46,8 +53,8 @@ size_t Sprite::genSubimg(unsigned int rows, unsigned int columns, unsigned int x
 
     mSubimg.clear();
 
-    float w = mTexture[0]->width() / columns - xsep * 2;
-    float h = mTexture[0]->height() / rows - ysep * 2;
+    float w = mImage[0].width() / columns - xsep * 2;
+    float h = mImage[0].height() / rows - ysep * 2;
 
     QSize size(w, h);
 
@@ -57,18 +64,16 @@ size_t Sprite::genSubimg(unsigned int rows, unsigned int columns, unsigned int x
             QRect rect = QRect(coord, size);
 
             QImage img = mImage[!origTexture].copy(rect);
-            QOpenGLTexture *texture = new QOpenGLTexture(img);
-
-            mSubimg.append(qMakePair(img, texture));
+            mSubimg.append(SubImagePtr(new SubImage(img)));
         }
     }
 
-    return mSubimg.size()-1;
+    return mSubimg.size();
 }
 
 size_t Sprite::count()
 {
-    return mSubimg.size()-1;
+    return mSubimg.size();
 }
 
 void Sprite::setOrigTexture(bool value)
@@ -88,7 +93,7 @@ void Sprite::setAlpha(const QColor &color)
                 mImage[1].setPixel(x,y, Qt::transparent);
         }
     }
-    mTexture[1] = new QOpenGLTexture(mImage[1]);
+    //mTexture[1] = new QOpenGLTexture(mImage[1]);
     origTexture = false;
 }
 
@@ -149,8 +154,7 @@ Coordinate Sprite::hotspot() const
 
 void Sprite::render()
 {
-
-    glEnable(GL_TEXTURE_2D);
+   glEnable(GL_TEXTURE_2D);
     glEnable(GL_COLOR_MATERIAL);
 
     glEnable (GL_BLEND);
@@ -166,20 +170,20 @@ void Sprite::render()
         glRotatef(mAngle, 0,0,1);
     }
 
-    mTexture[!origTexture]->bind();
+    mTexture[!origTexture]->tex->bind();
 
     glBegin(GL_QUADS);
 
     glTexCoord2f(0, 0);
     glVertex2f( -mHotspot.rx(), -mHotspot.ry() );
 
-    glTexCoord2f(width()/mTexture[0]->width(), 0);
+    glTexCoord2f(width()/mTexture[0]->tex->width(), 0);
     glVertex2f( mWidth-mHotspot.rx(), -mHotspot.ry() );
 
-    glTexCoord2f(width()/mTexture[0]->width(), height()/mTexture[0]->height());
+    glTexCoord2f(width()/mTexture[0]->tex->width(), height()/mTexture[0]->tex->height());
     glVertex2f( mWidth-mHotspot.rx(), mHeight-mHotspot.ry() );
 
-    glTexCoord2f(0, height()/mTexture[0]->height());
+    glTexCoord2f(0, height()/mTexture[0]->tex->height());
     glVertex2f( -mHotspot.rx(), mHeight-mHotspot.ry() );
 
     glEnd();
@@ -207,9 +211,9 @@ void Sprite::render(int subimg)
         glRotatef(mAngle, 0,0,1);
     }
 
-    mSubimg[subimg].second->bind();
+    mSubimg[subimg]->tex->bind();
 
-    QSize size = QSize(mSubimg[subimg].first.width(), mSubimg[subimg].first.height());
+    QSize size = QSize(mSubimg[subimg]->img.width(), mSubimg[subimg]->img.height());
     QPoint center = QPoint(size.width()/2, size.height()/2);
 
     glBegin(GL_QUADS);
@@ -231,3 +235,8 @@ void Sprite::render(int subimg)
     glDisable(GL_BLEND);
 }
 
+void Sprite::cleanup()
+{
+    mSubimg.clear();
+    //mTexture[0]->destroy();
+}

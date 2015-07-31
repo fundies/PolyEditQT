@@ -3,6 +3,7 @@
 
 #include "mainwindow.h"
 #include <QToolBar>
+#include <QSpinBox>
 
 /**
  * @brief The ToolBar class

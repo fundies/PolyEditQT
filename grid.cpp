@@ -14,7 +14,7 @@ Grid::Grid(unsigned int width, unsigned int height, unsigned int rows, unsigned 
     setSize(width, height, rows, columns, xSep, ySep);
 }
 
-void Grid::setSize(int xoff, int yoff, int xSep, int ySep, int canvasW, int canvasH, int zoom)
+void Grid::setSize(int xoff, int yoff, int xSep, int ySep, int canvasW, int canvasH, double zoom)
 {
     mXsep = xSep;
     mYSep = ySep;

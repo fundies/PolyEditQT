@@ -2,26 +2,24 @@
 #include "menubar.h"
 #include "toolbar.h"
 
-#include <QMenuBar>
-#include <QToolBar>
 #include <QLayout>
 #include <QSplitter>
 #include <QStatusBar>
-#include <QToolButton>
-#include <QErrorMessage>
 #include <QFileDialog>
+#include <QFileInfo>
 
 #include "masktab.h"
 #include "utility.h"
-#include "maincanvas.h"
+#include "canvas.h"
+#include "imageloader.h"
 
-#include <iostream>
-
-MainWindow::MainWindow(QWidget *parent)
-    : GLWindow(parent)
+MainWindow::MainWindow(QWidget *parent) : GLWindow()
 {
-    mTimer = new QTimer(this);
-    subImg = 0;
+
+    mCanvas = new Canvas(this);
+
+    animationEdit = Q_NULLPTR;
+    imgLoader = Q_NULLPTR;
 
     mViewGrid = true;
     mViewSprite = true;
@@ -29,13 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
     mYsep = 16;
 
     mCoord = Coordinate(0,0);
-    mActions = new QActions(this);
-    mGrid = new Grid(16, 16, width(), height());
-    mCanvas = new MainCanvas(this);
+    mGrid = QSharedPointer<Grid>(new Grid(16, 16, width(), height()));
 
     mCentralWidget = new QWidget(this);
 
-    this->setCentralWidget(mCentralWidget);
+    setCentralWidget(mCentralWidget);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
@@ -68,33 +64,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(mActions->aOpen, &QAction::triggered,  this, &MainWindow::open);
     connect(mActions->aSprite, &QAction::triggered,  this, &MainWindow::editSprite);
+    connect(mActions->aAnimation, &QAction::triggered,  this, &MainWindow::editAnimation);
 
     connect(mActions->aViewGrid, &QAction::toggled,  this, &MainWindow::viewGrid);
     connect(mActions->aViewSprite, &QAction::toggled,  this, &MainWindow::viewSprite);
-    connect(mActions->aZoomIn, &QAction::triggered, this, &MainWindow::zoomIn);
-    connect(mActions->aZoomOut, &QAction::triggered, this, &MainWindow::zoomOut);
-    connect(mActions->aZoom100, &QAction::triggered, this, &MainWindow::zoom100);
 
-    connect(mActions->aPlay, &QAction::triggered,  this, &MainWindow::play);
-    connect(mTimer, &QTimer::timeout, this, &MainWindow::incrementSubimg);
-    connect(mActions->aPause, &QAction::triggered,  this, &MainWindow::pause);
-    connect(mActions->aStop, &QAction::triggered,  this, &MainWindow::stop);
 
     connect(mToolBar->gridX, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::setXsep);
     connect(mToolBar->gridY, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::setYsep);
-}
 
-MainWindow::~MainWindow()
-{
-    delete mActions;
-    delete mGrid;
-    delete mCanvas;
-    delete mCentralWidget;
-}
-
-QActions* MainWindow::actions()
-{
-    return mActions;
+    //zoom = 1;
+    //zoomLast = 1;
 }
 
 void MainWindow::render()
@@ -124,6 +104,8 @@ void MainWindow::render()
 
     for (auto i : *table)
     {
+        i->scale(zoom);
+
         std::function<void()> f;
 
         if (i->getType() == PolyEdit::Polygon)
@@ -160,9 +142,19 @@ const Coordinate MainWindow::mapToReal(Coordinate c)
 
     return Coordinate(x,y);
 }
+QOpenGLContext *MainWindow::getCtx() const
+{
+    return mCanvas->context();
+}
+
 void MainWindow::setSpr(const QSharedPointer<Sprite> &spr)
 {
     mSpr = spr;
+
+    if (animationEdit == Q_NULLPTR)
+        animationEdit = new AnimationFrame(this);
+
+    animationEdit->setContents(mSpr);
 }
 
 
@@ -212,42 +204,38 @@ void MainWindow::open()
     if (!fileNames.isEmpty())
         img = QImage(fileNames[0]);
 
+    if (!img.isNull() && imgLoader == Q_NULLPTR)
+    {
+        imgLoader = new ImageFrame(this, img);
+    }
+
     if (!img.isNull())
     {
-        imgLoader = new ImageLoader(this, img);
+        QFileInfo f(fileNames[0]);
+        imgLoader->setWindowTitle(f.fileName());
         imgLoader->show();
     }
 }
 
-void MainWindow::play()
-{
-    mTimer->start(1000/60);
-}
-
-void MainWindow::pause()
-{
-    mTimer->stop();
-    mToolBar->frame->setValue(subImg);
-}
-
-void MainWindow::stop()
-{
-    mTimer->stop();
-    subImg = 0;
-    mToolBar->frame->setValue(0);
-}
-
-void MainWindow::incrementSubimg()
-{
-    if (subImg < mSpr->count())
-        subImg++;
-    else
-        subImg = 0;
-}
 
 void MainWindow::editSprite()
 {
-    imgLoader->show();
+    if (imgLoader!=Q_NULLPTR)
+    {
+        imgLoader->show();
+    }
+    else
+    {
+        open();
+    }
+}
+
+void MainWindow::editAnimation()
+{
+    if (animationEdit == Q_NULLPTR)
+        animationEdit = new AnimationFrame(this);
+
+    animationEdit->show();
 }
 
 void MainWindow::viewGrid(bool value)
@@ -277,38 +265,13 @@ void MainWindow::setYsep(int value)
     updateGrid();
 }
 
-void MainWindow::zoomIn()
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-    std::cout << "wat" << std::endl;
-   setZoom(2);
-}
-
-void MainWindow::zoomOut()
-{
-   setZoom(0.5);
-}
-
-void MainWindow::zoom100()
-{
-    setZoom(1);
+    close();
 }
 
 void MainWindow::setZoom(double factor)
 {
-    if (compareDouble(factor,1))
-    {
-        zoom = 1;
-        return;
-    }
-
-    double zoomLast = zoom;
-
-    zoom *= factor;
-    zoom = std::min(std::max(0.125, zoom), static_cast<double>(32));
-
-    if (compareDouble(zoomLast,zoom))
-        return;
-
+    GLWindow::setZoom(factor);
     updateGrid();
-    //updateMouse();
 }

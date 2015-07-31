@@ -3,10 +3,33 @@
 
 #include "coordinate.h"
 #include <QOpenGLTexture>
+#include <QSharedPointer>
+#include <QOpenGLContext>
+
+//#include "canvas.h"
+
+class Canvas;
+class Sprite;
+class SubImage;
+
+typedef QSharedPointer<Sprite> SpritePtr;
+typedef QSharedPointer<SubImage> SubImagePtr;
+
+class SubImage
+{
+public:
+    SubImage(QImage image);
+
+    QImage img;
+    QSharedPointer<QOpenGLTexture> tex;
+
+};
 
 class Sprite
 {
 public:
+
+    SubImagePtr mTexture[2];
 
     Sprite();
     Sprite(QImage &image);
@@ -29,9 +52,13 @@ public:
     int width() const;
     int height() const;
 
+    void cleanup();
+
     Coordinate hotspot() const;
+    QList<SubImagePtr> mSubimg;
 
 private:
+
     Coordinate mPosition;
     Coordinate mHotspot;
     int mAngle;
@@ -40,10 +67,7 @@ private:
     float yscale;
 
     bool origTexture;
-    QOpenGLTexture *mTexture[2];
     QImage mImage[2];
-
-    QList<QPair<QImage, QOpenGLTexture*>> mSubimg;
 
     bool xflip;
     bool yflip;

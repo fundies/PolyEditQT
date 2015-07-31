@@ -81,7 +81,7 @@ public:
      * @param canvasH canvas height
      * @param zoom canvas zoom factor
      */
-    void setSize(int xoff, int yoff, int xSep, int ySep, int canvasW, int canvasH, int zoom);
+    void setSize(int xoff, int yoff, int xSep, int ySep, int canvasW, int canvasH, double zoom);
 
 
     /**

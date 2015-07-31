@@ -1,12 +1,14 @@
 #include "mask.h"
 #include "utility.h"
-#include <iostream>
+#include <QDebug>
 
 Mask::Mask(QOpenGLWidget* parent)
 {
     mParent = parent;
     mRadius = 0;
     mType = PolyEdit::Polygon;
+    xscale = 1;
+    yscale = 1;
 }
 
 void Mask::addc(Coordinate c)
@@ -29,6 +31,19 @@ int Mask::size()
     return mcs.size();
 }
 
+void Mask::scale(float scale)
+{
+    xscale=scale;
+    yscale=scale;
+}
+
+void Mask::scale(float x, float y)
+{
+    xscale=x;
+    yscale=y;
+}
+
+
 void Mask::render()
 {
     // Disable textures in the pipeline
@@ -42,7 +57,7 @@ void Mask::render()
         for (auto i : mcs)
         {
             //mParent->qglColor(i.getColor());
-            glVertex2f(i.rx(), -i.ry()); // reverse y axis
+            glVertex2f(i.rx() * xscale, -i.ry() * yscale); // reverse y axis
         }
 
         glEnd();
@@ -52,7 +67,7 @@ void Mask::render()
 
         for (auto i : mcs)
         {
-            drawCircle(Coordinate(i.rx(), -i.ry()), 5, steps, false);
+            drawCircle(Coordinate(i.rx() * xscale, -i.ry() * yscale), 5, steps, false);
         }
     }
 
@@ -66,13 +81,13 @@ void Mask::render(Coordinate mousePos)
     // Draw everything expect polygon's here
     if (mType == PolyEdit::Circle && !mcs.empty())
     {
-        Coordinate c = Coordinate(mcs[0].rx(), -mcs[0].ry()); //reverse y axis
+        Coordinate c = Coordinate(mcs[0].rx() * xscale, -mcs[0].ry() * yscale); //reverse y axis
         drawCircle(c, 5, 30, false); // Origin
 
         if (mRadius == 0)
-            drawCircle(c, distance(mcs[0], mousePos), 30, true);
+            drawCircle(c, distance(Coordinate(c.rx(), -c.ry()), mousePos * xscale), 30, true);
         else
-            drawCircle(c, mRadius, 30, true);
+            drawCircle(c, mRadius * xscale, 30, true);
     }
 
     if (mType == PolyEdit::Box && !mcs.empty())
@@ -93,8 +108,6 @@ void Mask::render(Coordinate mousePos)
             int x = (sign(width) == -1) ? mousePos.rx() : mcs[0].rx();
             int y = (sign(height) == -1) ? mousePos.ry() : mcs[0].ry();
 
-            std::cout << y << std::endl;
-
             width = abs(width);
             height = abs(height);
 
@@ -111,7 +124,7 @@ void Mask::render(Coordinate mousePos)
             int y = -(mcs[2].ry() + mcs[0].ry())/2;
 
             // Draw the orgin too
-            Coordinate origin = Coordinate(x,y);
+            Coordinate origin = Coordinate(x * xscale, y * yscale);
             drawCircle(origin, 5, 30, false);
         }
 
@@ -119,8 +132,7 @@ void Mask::render(Coordinate mousePos)
 
         for (auto i : *temp)
         {
-            //mParent->qglColor(i.getColor());
-            glVertex2f(i.rx(), -i.ry()); // reverse y axis
+            glVertex2f(i.rx() * xscale, -i.ry() * yscale); // reverse y axis
         }
 
         glEnd();

@@ -84,6 +84,8 @@ public:
         return mMask->getc(i);
     }*/
 
+    void scale(double factor);
+
 private slots:
 
     /**

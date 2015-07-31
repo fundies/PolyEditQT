@@ -19,6 +19,7 @@ public:
     QAction* aCopy;
     QAction* aPaste;
     QAction* aSprite;
+    QAction* aAnimation;
     QAction* aViewGrid;
     QAction* aViewSprite;
     QAction* aViewSymmetry;

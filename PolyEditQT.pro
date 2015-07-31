@@ -27,12 +27,15 @@ SOURCES += main.cpp\
     coordinate.cpp \
     utility.cpp \
     masktab.cpp \
-    imageloader.cpp \
     imagebounds.cpp \
     glwindow.cpp \
-    maincanvas.cpp \
     sprite.cpp \
-    checkers.cpp
+    checkers.cpp \
+    spritemodel.cpp \
+    animationframe.cpp \
+    animationview.cpp \
+    animationtoolbar.cpp \
+    imageframe.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -51,12 +54,18 @@ HEADERS  += mainwindow.h \
     imageloader.h \
     imagebounds.h \
     glwindow.h \
-    maincanvas.h \
     sprite.h \
-    checkers.h
+    checkers.h \
+    spritemodel.h \
+    animationframe.h \
+    animationview.h \
+    animationtoolbar.h
 
 CONFIG += c++11
 
 QMAKE_LFLAGS += -lGLU
 
 DISTFILES +=
+
+RESOURCES += \
+    images.qrc

@@ -5,9 +5,12 @@
 #include "imageloader.h"
 #include "imagebounds.h"
 #include "checkers.h"
+#include "mainwindow.h"
 
-ImageLoader::ImageLoader(MainWindow *parent, QImage &image) : GLWindow(parent)
+ImageFrame::ImageFrame(MainWindow *parent, QImage &image) : GLWindow(parent)
 {
+    mCanvas = new Canvas(this);
+    mCanvas->setMinimumSize(image.width(), image.height());
 
     mParent = parent;
 
@@ -26,10 +29,6 @@ ImageLoader::ImageLoader(MainWindow *parent, QImage &image) : GLWindow(parent)
     mainLayout->addWidget(bounds);
     bounds->btnAlpha->setFlat(true);
 
-
-    mCanvas = new Canvas(this);
-    mCanvas->setMinimumSize(image.width(), image.height());
-
     scrollArea = new QScrollArea;
     scrollArea->setWidget(mCanvas);
     scrollArea->setWidgetResizable(true);
@@ -43,32 +42,32 @@ ImageLoader::ImageLoader(MainWindow *parent, QImage &image) : GLWindow(parent)
     mSpnX = 0;
     mSpnY = 0;
 
-    connect(bounds->spnRows, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageLoader::setSpnRows);
-    connect(bounds->spnColumns, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageLoader::setSpnColumns);
-    connect(bounds->spnXsep, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageLoader::setSpnX);
-    connect(bounds->spnYsep, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageLoader::setSpnY);
+    connect(bounds->spnRows, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageFrame::setSpnRows);
+    connect(bounds->spnColumns, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageFrame::setSpnColumns);
+    connect(bounds->spnXsep, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageFrame::setSpnX);
+    connect(bounds->spnYsep, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageFrame::setSpnY);
 
-    connect(bounds->btnAlpha, &QPushButton::pressed, this, &ImageLoader::setColor);
-    connect(colorDialog, &QColorDialog::colorSelected, this, &ImageLoader::setAlpha);
+    connect(bounds->btnAlpha, &QPushButton::pressed, this, &ImageFrame::setColor);
+    connect(colorDialog, &QColorDialog::colorSelected, this, &ImageFrame::setAlpha);
 
-    connect(bounds->btnImport, &QPushButton::pressed, this, &ImageLoader::import);
+    connect(bounds->btnImport, &QPushButton::pressed, this, &ImageFrame::import);
 
     QImage checkers = createCheckers();
-    mCheckers = new Sprite(checkers, width(), height());
+    mCheckers = SpritePtr(new Sprite(checkers, width(), height()));
 
-    mSpr = QSharedPointer<Sprite>(new Sprite(image));
-    mGrid = new Grid(mSpr->width(), mSpr->height(), 1, 1, 0, 0);
+    mSpr = SpritePtr(new Sprite(image));
+    mGrid = QSharedPointer<Grid>(new Grid(mSpr->width(), mSpr->height(), 1, 1, 0, 0));
     mGrid->setAlwaysVisible(true);
 }
 
-void ImageLoader::import()
+void ImageFrame::import()
 {
     mSpr->genSubimg(mSpnRows, mSpnColumns, mSpnX, mSpnY);
     mParent->setSpr(mSpr);
     hide();
 }
 
-void ImageLoader::render()
+void ImageFrame::render()
 {
     std::function<void()> c;
     c = [this] { mCheckers->render(); };
@@ -82,50 +81,50 @@ void ImageLoader::render()
     mCanvas->draw(g, mCanvas->width()/2 - mSpr->hotspot().rx(), mCanvas->height()/2 - mSpr->hotspot().ry());
 }
 
-void ImageLoader::canvasResized(int w, int h)
+void ImageFrame::canvasResized(int w, int h)
 {
     mCheckers->setSize(w,h);
     //mGrid->setSize(w, h, mSpnRows, mSpnColumns, mSpnX, mSpnY);
 }
 
-void ImageLoader::setColor()
+void ImageFrame::setColor()
 {
     mSpr->setOrigTexture(true);
     colorDialog->open();
 }
 
-void ImageLoader::setAlpha(const QColor &color)
+void ImageFrame::setAlpha(const QColor &color)
 {
 mSpr->setAlpha(color);
     //std::cout << color.name().toStdString() << std::endl;
     //bounds->btnAlpha->setStyleSheet("QPushButton {background-color: " + color.name() + ";}");
 }
 
-void ImageLoader::setSpnRows(int i)
+void ImageFrame::setSpnRows(int i)
 {
     mSpnRows = i;
     updateGrid();
 }
 
-void ImageLoader::setSpnColumns(int i)
+void ImageFrame::setSpnColumns(int i)
 {
     mSpnColumns = i;
     updateGrid();
 }
 
-void ImageLoader::setSpnX(int i)
+void ImageFrame::setSpnX(int i)
 {
     mSpnX = i;
     updateGrid();
 }
 
-void ImageLoader::setSpnY(int i)
+void ImageFrame::setSpnY(int i)
 {
     mSpnY = i;
     updateGrid();
 }
 
-void ImageLoader::updateGrid()
+void ImageFrame::updateGrid()
 {
    mGrid->setSize(mSpr->width(), mSpr->height(), mSpnRows, mSpnColumns, mSpnX, mSpnY);
 }

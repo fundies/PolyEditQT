@@ -10,19 +10,21 @@
 #include "grid.h"
 #include "sprite.h"
 #include "imagebounds.h"
-#include "mainwindow.h"
+//#include "mainwindow.h"
 
-class ImageLoader : public GLWindow
+class MainWindow;
+
+class ImageFrame : public GLWindow
 {
     Q_OBJECT
 public:
-    ImageLoader(MainWindow *parent, QImage &image);
+    ImageFrame(MainWindow *parent, QImage &image);
     void canvasResized(int w, int h);
-
+    void render();
 
 private:
+
     void import();
-    void render();
     void setColor();
     void setAlpha(const QColor & color);
     void setSpnRows(int i);
@@ -35,16 +37,13 @@ private:
     ImageBounds* bounds;
     QScrollArea* scrollArea;
     QWidget* mCentralWidget;
-    Canvas* mCanvas;
-    Grid* mGrid;
+    QSharedPointer<Grid> mGrid;
 
     int mSpnRows;
     int mSpnColumns;
     int mSpnX;
     int mSpnY;
 
-    QSharedPointer<Sprite> mSpr;
-    Sprite *mCheckers;
 
     MainWindow *mParent;
 

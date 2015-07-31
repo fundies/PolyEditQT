@@ -28,6 +28,11 @@ MaskTab::MaskTab(MainWindow *parent, Canvas* canvas) : QTabWidget(parent)
     tabBar()->tabButton(1, QTabBar::RightSide)->resize(0, 0);
 }
 
+MaskTab::~MaskTab()
+{
+    delete mTable;
+}
+
 void MaskTab::addTab()
 {
     QString name = "Mask " + QString::number(count());

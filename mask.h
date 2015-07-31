@@ -114,7 +114,14 @@ public:
      */
     void setType(const PolyEdit::Shape &type);
 
+    void scale(float scale);
+    void scale(float x, float y);
+
 private:
+
+    float xscale;
+    float yscale;
+
     QList<Coordinate> mcs;
     QOpenGLWidget* mParent;
     int mRadius;

@@ -264,6 +264,11 @@ void Table::render()
     mMask->render();
 }
 
+void Table::scale(double factor)
+{
+    mMask->scale(factor);
+}
+
 void Table::render(Coordinate mousePos)
 {
     mMask->render(mousePos);

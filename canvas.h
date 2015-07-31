@@ -1,14 +1,14 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "coordinate.h"
-
 #include <QOpenGLWidget>
 #include <functional>
 
+#include "coordinate.h"
 #include "glwindow.h"
-
-class GLWindow;
+#include "mainwindow.h"
+#include "imageloader.h"
+#include "animationframe.h"
 
 /**
  * @brief The Canvas class
@@ -21,8 +21,15 @@ public:
      * @brief Canvas Canvas used for drawing
      * @param parent parent
      */
-    explicit Canvas(GLWindow *parent = 0);
+    Canvas(MainWindow *parent = 0);
+    Canvas(ImageFrame *parent = 0);
+    Canvas(AnimationFrame *parent = 0);
     ~Canvas();
+
+    /**
+     * @brief mousePos the mouse position relative to the canvas
+     */
+    Coordinate mousePos;
 
     /**
      * @brief draw passes opengl code to be executed
@@ -65,7 +72,20 @@ protected:
 
 private:
 
-    GLWindow *mParent;
+    /**
+     * @brief mouseMoveEvent Mouse moved event
+     * @param event event
+     */
+    void mouseMoveEvent(QMouseEvent * event);
+
+    /**
+     * @brief mousePressEvent Mouse Pressed event
+     * @param event event
+     */
+    void mousePressEvent(QMouseEvent * event);
+
+    MainWindow *mMainW;
+    GLWindow *mWin;
 };
 
 #endif // CANVAS_H

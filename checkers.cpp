@@ -1,5 +1,4 @@
 #include "checkers.h"
-#include <QByteArray>
 
 QImage createCheckers()
 {
@@ -44,6 +43,7 @@ QImage createCheckers()
         light = !light;
     }
 
-    return QImage(data, width, height, QImage::Format_RGB32);
+    QImage c = QImage(data, width, height, QImage::Format_RGB32);
+    return c;
 }
 

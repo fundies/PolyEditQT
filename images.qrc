@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/zoom_in.png</file>
+        <file>img/zoom.png</file>
+        <file>img/paste_plain.png</file>
+        <file>img/page_white_copy.png</file>
+        <file>img/grid_rectangular.png</file>
+        <file>img/folder_picture.png</file>
+        <file>img/disk_multiple.png</file>
+        <file>img/disk.png</file>
+        <file>img/cut_red.png</file>
+        <file>img/control_stop.png</file>
+        <file>img/control_play.png</file>
+        <file>img/control_pause.png</file>
+        <file>img/zoom_out.png</file>
+    </qresource>
+</RCC>

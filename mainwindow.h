@@ -9,18 +9,19 @@ class MainWindow;
 #include <QList>
 #include <QSharedPointer>
 #include <QTimer>
+#include <QOpenGLContext>
 
 #include "sprite.h"
 #include "glwindow.h"
-#include "qactions.h"
 #include "grid.h"
 #include "table.h"
-#include "imageloader.h"
+//#include "imageloader.h"
+#include "animationframe.h"
 
 class MenuBar;
 class ToolBar;
 class MainCanvas;
-class ImageLoader;
+class ImageFrame;
 
 /**
  * @brief The MainWindow class
@@ -30,19 +31,12 @@ class MainWindow : public GLWindow
     Q_OBJECT
 
 public:
+
     /**
      * @brief MainWindow
      * @param parent parent
      */
     MainWindow(QWidget *parent = 0);
-
-    ~MainWindow();
-
-    /**
-     * @brief actions stores actions used everywhere
-     * @return cer to actions
-     */
-    QActions* actions();
 
     /**
      * @brief render draw everything here
@@ -82,24 +76,32 @@ public:
 
     void setSpr(const QSharedPointer<Sprite> &spr);
 
+
+    QOpenGLContext *getCtx() const;
+
 private slots:
 
     void open();
-    void play();
-    void pause();
-    void stop();
-    void incrementSubimg();
+    //void play();
+    //void pause();
+    //void stop();
+    //void incrementSubimg();
     void editSprite();
+    void editAnimation();
     void viewGrid(bool value);
     void viewSprite(bool value);
-    void zoomIn();
-    void zoomOut();
-    void zoom100();
+    //void zoomIn();
+    //void zoomOut();
+    //void zoom100();
     void updateGrid();
     void setXsep(int value);
     void setYsep(int value);
 
 private:
+
+    void setZoom(double factor);
+
+    void closeEvent(QCloseEvent *event);
 
     /**
      * @brief mapToGrid map a cordinate relative to the grid
@@ -115,31 +117,28 @@ private:
      */
     const Coordinate mapToReal(Coordinate c);
 
-    void setZoom(double factor);
+    //void setZoom(double factor);
 
-    QTimer *mTimer;
-    unsigned int subImg;
+    //Canvas* mCanvas;
+    //Sprite *mCheckers;
+
     bool mViewGrid;
     bool mViewSprite;
     int mXsep;
     int mYsep;
 
-    ImageLoader* imgLoader;
+    ImageFrame* imgLoader;
+    AnimationFrame* animationEdit;
 
-    MainCanvas* mCanvas;
-    QSharedPointer<Sprite> mSpr;
-
-    double zoom = 1;
-    double zoomLast = 1;
+    //double zoom;
+    //double zoomLast;
 
     Coordinate mCoord;
 
     QLabel* xCoord;
     QLabel* yCoord;
 
-    QActions* mActions;
-
-    Grid* mGrid;
+    QSharedPointer<Grid> mGrid;
 
     ToolBar* mToolBar;
     MenuBar* mMenuBar;
@@ -147,6 +146,7 @@ private:
     Table* currentMask;
 
     QMap<int, Table *> *table;
+
 };
 
 #endif // MAINWINDOW_H
