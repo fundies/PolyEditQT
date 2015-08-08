@@ -62,9 +62,9 @@ ImageFrame::ImageFrame(MainWindow *parent, QImage &image) : GLWindow(parent)
 
 void ImageFrame::import()
 {
-    mSpr->genSubimg(mSpnRows, mSpnColumns, mSpnX, mSpnY);
+    qDebug() << mSpr->genSubimg(mSpnRows, mSpnColumns, mSpnX, mSpnY);
     mParent->setSpr(mSpr);
-    hide();
+    close();
 }
 
 void ImageFrame::render()
@@ -127,4 +127,9 @@ void ImageFrame::setSpnY(int i)
 void ImageFrame::updateGrid()
 {
    mGrid->setSize(mSpr->width(), mSpr->height(), mSpnRows, mSpnColumns, mSpnX, mSpnY);
+}
+
+void ImageFrame::setSpr(const SpritePtr &spr)
+{
+    mSpr = spr;
 }

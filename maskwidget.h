@@ -20,15 +20,24 @@ public:
      * @param canvas canvas
      */
     MaskWidget(QWidget *parent, Canvas *canvas);
+    MaskWidget(QWidget *parent, Canvas* canvas, Table* table);
 
     /**
      * @brief table returns cer to table
      * @return table*
      */
     Table *table() const;
+    void setTable(Table *table);
+
+    QString name() const;
+    void setName(const QString &name);
 
 private:
-        Table*  mTable;
+    Table*  mTable;\
+    QString mName;
+
+private slots:
+        void exportSVG();
 };
 
 #endif // MASKWIDGET_H

@@ -1,10 +1,16 @@
 #include "sprite.h"
 #include "canvas.h"
+#include "utility.h"
 
 #include <iostream>
 
 #include <QOpenGLContext>
 #include <QDebug>
+
+SubImage::SubImage()
+{
+   //tex = Q_NULLPTR;
+}
 
 SubImage::SubImage(QImage image) {
     tex = QSharedPointer<QOpenGLTexture>(new QOpenGLTexture(image));
@@ -12,7 +18,8 @@ SubImage::SubImage(QImage image) {
 }
 
 Sprite::Sprite()
-{   
+{
+
     origTexture = true;
     mPosition = Coordinate(0,0);
 
@@ -31,7 +38,7 @@ Sprite::Sprite()
 Sprite::Sprite(QImage &image) : Sprite()
 {
     mImage[0] = image;
-    mTexture[0] = SubImagePtr(new SubImage(image));
+    mTexture[0] = SubImage(image);
 
     mWidth = image.width();
     mHeight = image.height();
@@ -41,7 +48,7 @@ Sprite::Sprite(QImage &image) : Sprite()
 Sprite::Sprite(QImage &image, int w, int h) : Sprite()
 {
     mImage[0] = image;
-    mTexture[0] = SubImagePtr(new SubImage(image));
+    mTexture[0] = SubImage(image);
 
     mWidth = w;
     mHeight = h;
@@ -50,6 +57,9 @@ Sprite::Sprite(QImage &image, int w, int h) : Sprite()
 
 size_t Sprite::genSubimg(unsigned int rows, unsigned int columns, unsigned int xsep, unsigned int ysep)
 {
+
+    mRows = rows;
+    mColumns = columns;
 
     mSubimg.clear();
 
@@ -64,7 +74,7 @@ size_t Sprite::genSubimg(unsigned int rows, unsigned int columns, unsigned int x
             QRect rect = QRect(coord, size);
 
             QImage img = mImage[!origTexture].copy(rect);
-            mSubimg.append(SubImagePtr(new SubImage(img)));
+            mSubimg.append(SubImage(SubImage(img)));
         }
     }
 
@@ -93,7 +103,7 @@ void Sprite::setAlpha(const QColor &color)
                 mImage[1].setPixel(x,y, Qt::transparent);
         }
     }
-    //mTexture[1] = new QOpenGLTexture(mImage[1]);
+    mTexture[1] = SubImage(mImage[1]);
     origTexture = false;
 }
 
@@ -150,11 +160,21 @@ Coordinate Sprite::hotspot() const
 {
     return mHotspot;
 }
+int Sprite::rows() const
+{
+    return mRows;
+}
+int Sprite::columns() const
+{
+    return mColumns;
+}
+
+
 
 
 void Sprite::render()
 {
-   glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_COLOR_MATERIAL);
 
     glEnable (GL_BLEND);
@@ -170,25 +190,28 @@ void Sprite::render()
         glRotatef(mAngle, 0,0,1);
     }
 
-    mTexture[!origTexture]->tex->bind();
+    mTexture[!origTexture].tex->bind();
 
     glBegin(GL_QUADS);
 
     glTexCoord2f(0, 0);
     glVertex2f( -mHotspot.rx(), -mHotspot.ry() );
 
-    glTexCoord2f(width()/mTexture[0]->tex->width(), 0);
+    glTexCoord2f(width()/mTexture[0].tex->width(), 0);
     glVertex2f( mWidth-mHotspot.rx(), -mHotspot.ry() );
 
-    glTexCoord2f(width()/mTexture[0]->tex->width(), height()/mTexture[0]->tex->height());
+    glTexCoord2f(width()/mTexture[0].tex->width(), height()/mTexture[0].tex->height());
     glVertex2f( mWidth-mHotspot.rx(), mHeight-mHotspot.ry() );
 
-    glTexCoord2f(0, height()/mTexture[0]->tex->height());
+    glTexCoord2f(0, height()/mTexture[0].tex->height());
     glVertex2f( -mHotspot.rx(), mHeight-mHotspot.ry() );
 
     glEnd();
 
-    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+
+    // Reset to white
+    glColor4f(1,1,1,1);
 
 }
 
@@ -211,9 +234,9 @@ void Sprite::render(int subimg)
         glRotatef(mAngle, 0,0,1);
     }
 
-    mSubimg[subimg]->tex->bind();
+    mSubimg[subimg].tex->bind();
 
-    QSize size = QSize(mSubimg[subimg]->img.width(), mSubimg[subimg]->img.height());
+    QSize size = QSize(mSubimg[subimg].img.width(), mSubimg[subimg].img.height());
     QPoint center = QPoint(size.width()/2, size.height()/2);
 
     glBegin(GL_QUADS);
@@ -233,10 +256,110 @@ void Sprite::render(int subimg)
     glEnd();
 
     glDisable(GL_BLEND);
+
+    glDisable(GL_TEXTURE_2D);
+
+    // Reset to white
+    glColor4f(1,1,1,1);
+
+
 }
 
-void Sprite::cleanup()
+bool Sprite::isNull()
 {
+    return mSubimg.isEmpty();
+}
+
+Sprite::Sprite(const Sprite& other)
+{
+
+    mPosition = other.mPosition;
+    mHotspot = other.mHotspot;
+    mAngle = 0;
+    xscale = 1;
+    yscale = 1;
+
+    origTexture = other.origTexture;
+    mImage[0] = other.mImage[0];
+    mImage[1] = other.mImage[1];
+
+    xflip = other.xflip;
+    yflip = other.yflip;
+
+    xOff = other.xOff;
+    yOff = other.yOff;
+
+    mWidth = other.mWidth;
+    mHeight = other.mHeight;
+
     mSubimg.clear();
-    //mTexture[0]->destroy();
+    for (int i=0; i < other.mSubimg.size(); ++i)
+    {
+        //qDebug() << "wat";
+        mSubimg.append(SubImage(other.mSubimg[i].img));
+        //mSubimg[i].img.save("/home/greg/test/" + QString::number(i) +".png");
+    }
+}
+
+void Sprite::exportStrip(QString fpath)
+{
+    QImage img = generateStrip();
+    img.save(fpath);
+}
+
+QImage Sprite::generateStrip()
+{
+
+    //int rows = std::max(getFactor(count()), 1);
+    //int columns = count()/rows;
+    int columns = std::max(getFactor(count()), 1);
+    int rows = count()/columns;
+
+    mRows = columns;
+    mColumns = rows;
+
+    qDebug() << "rows: " << rows;
+    qDebug() << "columns: " << columns;
+    qDebug() << "width: " << mWidth;
+
+    int w = mSubimg.first().img.width();
+    int h = mSubimg.first().img.height();
+
+    int width = rows * w;
+    int height = columns * h;
+
+
+    QImage img(width, height, QImage::Format_ARGB32);
+    img.fill(Qt::transparent);
+
+    int r = 0;
+    int c = 0;
+    for (auto i : mSubimg)
+    {
+        for (int x=0; x < i.img.width(); ++x)
+        {
+            for (int y=0; y < i.img.height(); ++y)
+            {
+                QRgb p = i.img.pixel(x,y);
+                img.setPixel((r * w) + x, (c * h) + y, p);
+            }
+        }
+
+        if (r < rows-1)
+            r++;
+        else
+        {
+            c++;
+            r = 0;
+        }
+    }
+
+    //img.save(fpath);
+    return img;
+}
+
+void Sprite::generateMain()
+{
+    mImage[0] = generateStrip();
+    mTexture[0] = SubImage(mImage[0]);
 }

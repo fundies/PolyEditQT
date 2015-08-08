@@ -7,6 +7,7 @@
 
 Table::Table(QWidget *parent, QOpenGLWidget *glParent) : QTableWidget(parent)
 {
+    mRender = true;
     mType = PolyEdit::Polygon;
 
     isReady = false;
@@ -111,6 +112,10 @@ void Table::itemChanged(QTableWidgetItem *item)
             }
             break;
         }
+        case PolyEdit::Invalid:
+        {
+            break;
+        }
         }
     }
 }
@@ -121,6 +126,19 @@ void Table::insertRow(int row)
     setItem(row,0, new Cell(""));
     setItem(row,1, new Cell(""));
     isReady = true;
+}
+
+void Table::setRadius(int radius)
+{
+    setItem(2,0, new Cell(QString::number(radius)));
+}
+
+void Table::setBoxSize(int width, int height)
+{
+    //qDebug() << width;
+    //qDebug() << height;
+    setItem(2,0, new Cell(QString::number(width)));
+    setItem(3,0, new Cell(QString::number(height)));
 }
 
 void Table::addCoord(Coordinate c)
@@ -220,6 +238,10 @@ void Table::addCoord(Coordinate c)
 
         break;
     }
+    case PolyEdit::Invalid:
+    {
+        break;
+    }
     }
 }
 
@@ -261,7 +283,8 @@ PolyEdit::Shape Table::getType() const
 
 void Table::render()
 {
-    mMask->render();
+    if(mRender)
+        mMask->render();
 }
 
 void Table::scale(double factor)
@@ -271,7 +294,8 @@ void Table::scale(double factor)
 
 void Table::render(Coordinate mousePos)
 {
-    mMask->render(mousePos);
+    if(mRender)
+        mMask->render(mousePos);
 }
 
 void Table::removeRow(int row)
@@ -318,6 +342,10 @@ void Table::setMaskType(PolyEdit::Shape type)
         setVerticalHeaderItem(3,new Cell("Height"));
         break;
     }
+    case PolyEdit::Invalid:
+    {
+        break;
+    }
     }
 
     clearContents();
@@ -353,4 +381,14 @@ void Table::clearContents()
         for(int j=0; j < columnCount(); j++)
             setItem(i, j, new Cell(""));
     }
+}
+
+void Table::exportSVG(QString fpath)
+{
+    mMask->exportSVG(fpath);
+}
+
+void Table::setRender(bool state)
+{
+    mRender = state;
 }

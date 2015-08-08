@@ -50,16 +50,19 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
     addSeparator();
 
     speed = new QDoubleSpinBox(parent);
+    speed->setValue(0.03);
     speed->setPrefix("Speed: ");
-    speed->setDecimals(3);
-    speed->setSingleStep(0.001);
+    speed->setDecimals(4);
+    speed->setSingleStep(0.0001);
     speed->setAccelerated(true);
     addWidget(speed);
 
     addSeparator();
 
     frame = new QSpinBox(parent);
+    frame->setMaximum(0);
     frame->setPrefix("Frame: ");
+    frame->setAccelerated(true);
     addWidget(frame);
 }
 

@@ -2,15 +2,35 @@
 
 #include <QDebug>
 #include <QMimeData>
+#include <QInputDialog>
 
-SpriteModel::SpriteModel(QObject * parent) : QAbstractListModel(parent)
+SpriteModel::SpriteModel(QWidget * parent) : QAbstractListModel(parent)
 {
+    mParent = parent;
+    mSpr = Q_NULLPTR;
 }
 
 
 bool SpriteModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    Q_UNUSED(parent);
+    if (mSpr == Q_NULLPTR)
+    {
+        bool ok1;
+        int width = QInputDialog::getInt(mParent, tr("Input Width"),
+                                     tr("Width:"), 25, 1, 2147483647, 1, &ok1);
+
+        bool ok2;
+        int height = QInputDialog::getInt(mParent, tr("Input Height"),
+                                     tr("Height:"), 25, 1, 2147483647, 1, &ok2);
+        if (!ok1 || !ok2)
+            insertRows(position, rows, parent);
+
+        QImage img(width, height, QImage::Format_RGBA8888);
+        img.fill(Qt::gray);
+        mDefault = SubImage(img);
+
+        mSpr = new Sprite();
+    }
 
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
@@ -41,7 +61,7 @@ bool SpriteModel::setData(const QModelIndex &index, const QVariant &value, int r
     Q_UNUSED(role);
 
     QImage img = value.value<QImage>();
-    mSpr->mSubimg.replace(index.row(), SubImagePtr(new SubImage(img)));
+    mSpr->mSubimg.replace(index.row(), SubImage(img));
 
     return true;
 }
@@ -58,7 +78,7 @@ int SpriteModel::rowCount(const QModelIndex & parent) const
 QVariant SpriteModel::data(const QModelIndex & index, int role) const
 {
     if (role == Qt::DecorationRole)
-        return mSpr->mSubimg[index.row()]->img;
+        return mSpr->mSubimg[index.row()].img;
     else if (role == Qt::DisplayRole)
         return "";
     else
@@ -159,9 +179,12 @@ void SpriteModel::setSpr(const SpritePtr &spr)
 {
     beginResetModel();
 
-    QImage img = spr->mSubimg[0]->img;
-    img.fill(Qt::white);
-    mDefault = SubImagePtr(new SubImage(img));
+    if (!spr->isNull())
+    {
+        QImage img = spr->mSubimg[0].img;
+        img.fill(Qt::gray);
+        mDefault = SubImage(img);
+    }
     mSpr = spr;
 
     endResetModel();
@@ -170,5 +193,10 @@ void SpriteModel::setSpr(const SpritePtr &spr)
 
 Qt::DropActions SpriteModel::supportedDropActions() const
 {
-    return Qt::MoveAction;
+    return Qt::MoveAction | Qt::CopyAction;
+}
+
+QSize SpriteModel::getCurrentSize() const
+{
+    return mDefault.img.size();
 }

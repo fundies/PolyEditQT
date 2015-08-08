@@ -1,14 +1,17 @@
 #include "animationtoolbar.h"
 #include "animationframe.h"
 
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+
 AnimationToolBar::AnimationToolBar(AnimationFrame *parent)
 {
     addAction(parent->actions()->aOpen);
 
     addSeparator();
 
-    addAction(parent->actions()->aSave);
-    addAction(parent->actions()->aSaveAs);
+    addAction(parent->actions()->aAddBlank);
+    addAction(parent->actions()->aDeleteImg);
 
     addSeparator();
 
@@ -25,17 +28,26 @@ AnimationToolBar::AnimationToolBar(AnimationFrame *parent)
 
     addSeparator();
 
-    /*speed = new QDoubleSpinBox(parent);
-    speed->setPrefix("Speed: ");
-    speed->setDecimals(3);
-    speed->setSingleStep(0.001);
-    speed->setAccelerated(true);
-    addWidget(speed);*/
-
-    addSeparator();
-
     addAction(parent->actions()->aPlay);
     addAction(parent->actions()->aPause);
     addAction(parent->actions()->aStop);
+
+    addSeparator();
+
+    speed = new QDoubleSpinBox(parent);
+    speed->setValue(0.03);
+    speed->setPrefix("Speed: ");
+    speed->setDecimals(4);
+    speed->setSingleStep(0.0001);
+    speed->setAccelerated(true);
+    addWidget(speed);
+
+    addSeparator();
+
+    frame = new QSpinBox(parent);
+    frame->setMaximum(0);
+    frame->setPrefix("Frame: ");
+    frame->setAccelerated(true);
+    addWidget(frame);
 }
 

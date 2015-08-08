@@ -13,5 +13,14 @@
         <file>img/control_play.png</file>
         <file>img/control_pause.png</file>
         <file>img/zoom_out.png</file>
+        <file>img/picture_empty.png</file>
+        <file>img/cross.png</file>
+        <file>img/sprite.png</file>
+        <file>img/icon.png</file>
+        <file>img/animation.png</file>
+        <file>img/star.png</file>
+        <file>img/door_in.png</file>
+        <file>img/page_white.png</file>
+        <file>img/add.png</file>
     </qresource>
 </RCC>

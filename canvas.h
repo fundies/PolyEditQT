@@ -7,7 +7,7 @@
 #include "coordinate.h"
 #include "glwindow.h"
 #include "mainwindow.h"
-#include "imageloader.h"
+#include "imageframe.h"
 #include "animationframe.h"
 
 /**

@@ -10,6 +10,8 @@ public:
     AnimationView(QWidget *parent);
     //void paintEvent(QPaintEvent * event);
     QSize sizeHint() const;
+    int getCursor() const;
+    QModelIndexList getSelection();
 };
 
 #endif // ANIMATIONVIEW_H

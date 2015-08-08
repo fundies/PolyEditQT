@@ -39,6 +39,9 @@ public:
 
     bool spriteExists() const;
 
+    double getSpeed() const;
+    void setSpeed(double value);
+
 protected slots:
 
     virtual void open();
@@ -55,10 +58,11 @@ protected:
     virtual void setZoom(double factor);
     double zoom;
     double zoomLast;
+    double speed;
 
 
     QTimer *mTimer;
-    unsigned int subImg;
+    double subImg;
 
     QWidget* mCentralWidget;
     QSharedPointer<QActions> mActions;

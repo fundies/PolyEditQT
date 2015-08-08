@@ -2,8 +2,8 @@
 #define ANIMATIONTOOLBAR_H
 
 #include <QToolBar>
-
-//#include "animationframe.h"
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 class AnimationFrame;
 
@@ -11,6 +11,8 @@ class AnimationToolBar : public QToolBar
 {
 public:
     AnimationToolBar(AnimationFrame *parent);
+    QSpinBox* frame;
+    QDoubleSpinBox* speed;
 };
 
 #endif // ANIMATIONTOOLBAR_H

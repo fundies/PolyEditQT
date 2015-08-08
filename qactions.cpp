@@ -2,6 +2,9 @@
 
 QActions::QActions(QWidget *parent)
 {
+    QPixmap newPix(":/img/page_white.png");
+    aNew = new QAction(newPix, "&New", parent);
+
     QPixmap openPix(":/img/folder_picture.png");
     aOpen = new QAction(openPix, "&Open", parent);
 
@@ -9,9 +12,9 @@ QActions::QActions(QWidget *parent)
     aSave = new QAction(savePix, "&Save", parent);
 
     QPixmap saveAsPix(":/img/disk_multiple.png");
-    aSaveAs = new QAction(saveAsPix, "&Save", parent);
+    aSaveAs = new QAction(saveAsPix, "&Save As", parent);
 
-    QPixmap quitPix(":/img/door_out.png");
+    QPixmap quitPix(":/img/door_in.png");
     aQuit = new QAction(quitPix, "&Quit", parent);
 
     QPixmap cutPix(":/img/cut_red.png");
@@ -23,8 +26,11 @@ QActions::QActions(QWidget *parent)
     QPixmap pastePix(":/img/paste_plain.png");
     aPaste = new QAction(pastePix, "&Paste", parent);
 
-    aSprite = new QAction("Sprite", parent);
-    aAnimation = new QAction("Animation", parent);
+    QPixmap sprPix(":/img/sprite.png");
+    aSprite = new QAction(sprPix, "Sprite", parent);
+
+    QPixmap animationPix(":/img/animation.png");
+    aAnimation = new QAction(animationPix, "Animation", parent);
 
     QPixmap gridPix(":/img/grid_rectangular.png");
     aViewGrid = new QAction(gridPix, "&Grid", parent);
@@ -59,5 +65,11 @@ QActions::QActions(QWidget *parent)
 
     QPixmap stopPix(":/img/control_stop.png");
     aStop = new QAction(stopPix, "&Stop", parent);
+
+    QPixmap blankPix(":/img/picture_empty.png");
+    aAddBlank = new QAction(blankPix, "&Insert Blank", parent);
+
+    QPixmap delPix(":/img/cross.png");
+    aDeleteImg = new QAction(delPix, "&Delete Images", parent);
 }
 

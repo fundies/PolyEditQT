@@ -3,19 +3,20 @@
 MenuBar::MenuBar(MainWindow *parent) : QMenuBar(parent)
 {
     fileMenu = new QMenu("File");
+    fileMenu->addAction(parent->actions()->aNew);
     fileMenu->addAction(parent->actions()->aOpen);
     fileMenu->addSeparator();
     fileMenu->addAction(parent->actions()->aSave);
-    //fileMenu->addAction(parent->actions()->saveAs);
+    fileMenu->addAction(parent->actions()->aSaveAs);
     fileMenu->addSeparator();
     fileMenu->addAction(parent->actions()->aQuit);
     addMenu(fileMenu);
 
     editMenu = new QMenu("Edit");
-    editMenu->addAction(parent->actions()->aCut);
-    editMenu->addAction(parent->actions()->aCopy);
-    editMenu->addAction(parent->actions()->aPaste);
-    editMenu->addSeparator();
+    //editMenu->addAction(parent->actions()->aCut);
+    //editMenu->addAction(parent->actions()->aCopy);
+    //editMenu->addAction(parent->actions()->aPaste);
+    //editMenu->addSeparator();
     editMenu->addAction(parent->actions()->aSprite);
     editMenu->addAction(parent->actions()->aAnimation);
     addMenu(editMenu);

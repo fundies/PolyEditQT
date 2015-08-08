@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+QT       += core gui opengl xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,7 +35,11 @@ SOURCES += main.cpp\
     animationframe.cpp \
     animationview.cpp \
     animationtoolbar.cpp \
-    imageframe.cpp
+    imageframe.cpp \
+    animationmenu.cpp \
+    yesnowidget.cpp \
+    svgreader.cpp \
+    aboutframe.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -51,7 +55,6 @@ HEADERS  += mainwindow.h \
     coordinate.h \
     utility.h \
     masktab.h \
-    imageloader.h \
     imagebounds.h \
     glwindow.h \
     sprite.h \
@@ -59,7 +62,12 @@ HEADERS  += mainwindow.h \
     spritemodel.h \
     animationframe.h \
     animationview.h \
-    animationtoolbar.h
+    animationtoolbar.h \
+    animationmenu.h \
+    yesnowidget.h \
+    svgreader.h \
+    aboutframe.h \
+    imageframe.h
 
 CONFIG += c++11
 
@@ -68,4 +76,7 @@ QMAKE_LFLAGS += -lGLU
 DISTFILES +=
 
 RESOURCES += \
-    images.qrc
+    images.qrc \
+    lisence.qrc
+
+LIBS +=  -lz -lquazip

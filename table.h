@@ -76,6 +76,9 @@ public:
      */
     int getRadius() const;
 
+    void setRadius(int radius);
+    void setBoxSize(int width, int height);
+
     // Todo : replace with overload
     const Coordinate getc(int i) const;
 
@@ -85,6 +88,8 @@ public:
     }*/
 
     void scale(double factor);
+        void exportSVG(QString fpath);
+        void setRender(bool state);
 
 private slots:
 
@@ -119,6 +124,7 @@ private:
     bool isReady;
     Mask* mMask;
     PolyEdit::Shape mType;
+    bool mRender;
 };
 
 #endif // TABLE_H

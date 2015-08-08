@@ -2,7 +2,8 @@
 #define MASKTAB_H
 
 #include <QTabWidget>
-#include <QTabBar>
+//#include <QTabBar>
+#include <QList>
 
 #include "mainwindow.h"
 #include "maskwidget.h"
@@ -33,7 +34,13 @@ public:
      * @brief table return's a cer to map of tables[]
      * @return tables[]
      */
-    QMap<int, Table *> *table() const;
+    QList<Table *> *table() const;
+
+    Table* currentTable();
+
+    void addTab(Table* table);
+    void replaceCurrentTable(Table *t);
+    void clear();
 
 public slots:
 
@@ -56,9 +63,14 @@ private:
      */
     void addTab();
 
-    QMap<int, Table *> *mTable;
+    //QMap<QString, Table *> *mTable;
+    QList<Table*> *mTable;
+
     Canvas* mCanvas;
     MainWindow* mParent;
+
+    bool deleting;
+    int numMask;
 };
 
 #endif // MASKTAB_H

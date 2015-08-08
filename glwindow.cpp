@@ -13,6 +13,7 @@
 
 GLWindow::GLWindow(MainWindow *parent) : QMainWindow(parent)
 {
+    speed = 0.03;
     zoom = 1;
     zoomLast = 1;
 
@@ -33,7 +34,7 @@ GLWindow::GLWindow(MainWindow *parent) : QMainWindow(parent)
 
 GLWindow::~GLWindow()
 {
-    mCheckers.clear();
+    //mCheckers.clear();
 }
 
 void GLWindow::render()
@@ -54,13 +55,14 @@ void GLWindow::canvasResized(int w, int h)
 
 void GLWindow::play()
 {
+    // 60 Frames in 1 second
     mTimer->start(1000/60);
 }
 
 void GLWindow::pause()
 {
     mTimer->stop();
-    //mToolBar->frame->setValue(subImg);
+    //mToolBar->frame->setValue(static_cast<int>(subImg));
 }
 
 void GLWindow::stop()
@@ -72,8 +74,9 @@ void GLWindow::stop()
 
 void GLWindow::incrementSubimg()
 {
-    if (subImg < mSpr->count()-1)
-        subImg++;
+    //double speed = 60 *0.025;
+    if (subImg < mSpr->count()-1 - 60*speed)
+        subImg += 60*speed;
     else
         subImg = 0;
 }
@@ -112,6 +115,16 @@ void GLWindow::setZoom(double factor)
     if (mSpr != Q_NULLPTR)
         mSpr->scale(zoom);
 }
+double GLWindow::getSpeed() const
+{
+    return speed;
+}
+
+void GLWindow::setSpeed(double value)
+{
+    speed = value;
+}
+
 
 QSharedPointer<QActions> GLWindow::actions() const
 {

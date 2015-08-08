@@ -17,7 +17,9 @@ class MainWindow;
 #include "table.h"
 //#include "imageloader.h"
 #include "animationframe.h"
+#include "svgreader.h"
 
+class MaskTab;
 class MenuBar;
 class ToolBar;
 class MainCanvas;
@@ -74,17 +76,18 @@ public:
      */
     void setMask(Table* mask);
 
-    void setSpr(const QSharedPointer<Sprite> &spr);
-
-
-    QOpenGLContext *getCtx() const;
+    void setSpr(const SpritePtr &spr);
 
 private slots:
 
+    void reset();
     void open();
+    void save();
+    void saveAs();
+    void about();
     //void play();
-    //void pause();
-    //void stop();
+    void pause();
+    void stop();
     //void incrementSubimg();
     void editSprite();
     void editAnimation();
@@ -96,12 +99,17 @@ private slots:
     void updateGrid();
     void setXsep(int value);
     void setYsep(int value);
+    void setFrame(int frame);
 
 private:
 
-    void setZoom(double factor);
+    void openImage(QString fpath);
+    void openImage(QString fpath, int rows, int columns);
+    void openSVG(QString fpath);
+    void openSpr(QString fpath);
+    void addMask(SVG &svg);
 
-    void closeEvent(QCloseEvent *event);
+    void setZoom(double factor);
 
     /**
      * @brief mapToGrid map a cordinate relative to the grid
@@ -145,7 +153,10 @@ private:
 
     Table* currentMask;
 
-    QMap<int, Table *> *table;
+    MaskTab* mTabs;
+    QList<Table*> *table;
+
+    QString saveFile;
 
 };
 

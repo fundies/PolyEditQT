@@ -7,7 +7,7 @@
 /**
  * @brief The MaskComboBox class
  */
-class MaskComboBox : public QComboBox
+class MaskComboBox : public QWidget
 {
     Q_OBJECT
 public:
@@ -17,6 +17,9 @@ public:
      */
     MaskComboBox(Table *parent);
 
+
+    void setType(PolyEdit::Shape type);
+
 private slots:
 
     /**
@@ -24,9 +27,11 @@ private slots:
      * @param index new index
      */
     void currentIndexChanged(int index);
+    void setRender(bool state);
 
 private:
     Table* mParent;
+    QComboBox *mCombo;
 };
 
 #endif // MASKCOMBOBOX_H

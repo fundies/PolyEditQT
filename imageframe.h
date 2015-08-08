@@ -21,6 +21,7 @@ public:
     ImageFrame(MainWindow *parent, QImage &image);
     void canvasResized(int w, int h);
     void render();
+    void setSpr(const SpritePtr &spr);
 
 private:
 

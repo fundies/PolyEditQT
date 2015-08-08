@@ -11,6 +11,7 @@ class QActions
 
 public:
     QActions(QWidget *parent);
+    QAction* aNew;
     QAction* aOpen;
     QAction* aSave;
     QAction* aSaveAs;
@@ -30,7 +31,8 @@ public:
     QAction* aPause;
     QAction* aStop;
     QAction* aAbout;
-
+    QAction* aAddBlank;
+    QAction* aDeleteImg;
 };
 
 #endif // QACTIONS_H

@@ -14,7 +14,7 @@ class SpriteModel : public QAbstractListModel
     Q_OBJECT
 public:
 
-    SpriteModel(QObject * parent = 0);
+    SpriteModel(QWidget *parent = 0);
     void setContents(QList<QPair<QImage, QOpenGLTexture *> > &newList);
     int rowCount(const QModelIndex & parent) const;
     QVariant data(const QModelIndex & index, int role) const;
@@ -29,11 +29,13 @@ public:
 
     void setSpr(const SpritePtr &spr);
     SpritePtr getSpr() const;
+    QSize getCurrentSize() const;
 
 private:
 
     SpritePtr mSpr;
-    SubImagePtr mDefault;
+    SubImage mDefault;
+    QWidget* mParent;
 };
 
 #endif // SPRITEMODEL_H

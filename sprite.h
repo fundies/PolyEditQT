@@ -12,12 +12,14 @@ class Canvas;
 class Sprite;
 class SubImage;
 
-typedef QSharedPointer<Sprite> SpritePtr;
-typedef QSharedPointer<SubImage> SubImagePtr;
+typedef Sprite* SpritePtr;
+//typedef QSharedPointer<SubImage> SubImage;
 
 class SubImage
 {
 public:
+
+    SubImage();
     SubImage(QImage image);
 
     QImage img;
@@ -29,11 +31,13 @@ class Sprite
 {
 public:
 
-    SubImagePtr mTexture[2];
+    SubImage mTexture[2];
 
     Sprite();
     Sprite(QImage &image);
     Sprite(QImage &image, int w, int h);
+
+    Sprite(const Sprite& other);
 
     void setAlpha(const QColor &color);
     void setFlip(bool x, bool y);
@@ -48,14 +52,21 @@ public:
     void setOrigTexture(bool value);
     size_t genSubimg(unsigned int rows, unsigned int columns, unsigned int xsep, unsigned int ysep);
     size_t count();
+    void exportStrip(QString fpath);
+    void generateMain();
+        QImage generateStrip();
 
     int width() const;
     int height() const;
 
-    void cleanup();
+    bool isNull();
 
     Coordinate hotspot() const;
-    QList<SubImagePtr> mSubimg;
+    QList<SubImage> mSubimg;
+
+    int rows() const;
+
+    int columns() const;
 
 private:
 
@@ -77,6 +88,9 @@ private:
 
     int mWidth;
     int mHeight;
+
+    int mRows;
+    int mColumns;
 
 };
 

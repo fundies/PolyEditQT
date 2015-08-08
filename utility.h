@@ -3,6 +3,9 @@
 
 #include "coordinate.h"
 
+QString random_string(size_t length);
+int getFactor(int number);
+
 /**
  * @brief compareDouble avoids warnings for compairing doubles
  * @param a a

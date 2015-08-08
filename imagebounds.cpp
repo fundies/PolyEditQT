@@ -20,7 +20,9 @@ ImageBounds::ImageBounds(QWidget *parent) : QWidget(parent)
     layout->addWidget(new QLabel("Y Seperation: ", this, 0),4,0);
 
     spnRows = new QSpinBox(this);
+    spnRows->setValue(1);
     spnColumns = new QSpinBox(this);
+    spnColumns->setValue(1);
     spnXsep = new QSpinBox(this);
     spnYsep = new QSpinBox(this);
 

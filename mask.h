@@ -12,12 +12,15 @@
  * Shapes enum
  */
 namespace PolyEdit {
-    typedef enum Shape
-    {
-        Polygon = 0,
-        Circle = 1,
-        Box = 2
-    } Shape;
+typedef enum Shape
+{
+    Polygon = 0,
+    Circle = 1,
+    Box = 2,
+    Invalid = -1
+} Shape;
+
+Shape hashit (QString const& inString);
 }
 
 /**
@@ -116,6 +119,7 @@ public:
 
     void scale(float scale);
     void scale(float x, float y);
+    void exportSVG(QString fpath);
 
 private:
 
