@@ -3,7 +3,7 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <quazip/JlCompress.h>
+#include <quazip5/JlCompress.h>
 #include <QMessageBox>
 
 #include "mainwindow.h"
