@@ -13,11 +13,6 @@ before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa && sudo apt-get update -qq && sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
 
-before_script:
-  - travis_retry bundle
-  - if [ $TRAVIS_OS_NAME == linux ]; then travis_retry ./configure --llvm-config llvm-config-3.4; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then travis_retry ./configure; fi
-
 before_install:
     - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
     - sudo apt-get update -qq
