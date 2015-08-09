@@ -10,7 +10,7 @@ compiler:
 before_install:
   - echo $LANG
   - echo $LC_ALL
-  - if [ $TRAVIS_OS_NAME == linux ]; then sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa && sudo apt-get update -qq && sudo apt-get install -qq qt5-default; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then wget http://download.qt.io/official_releases/qt/5.0/5.0.2/qt-linux-opensource-5.0.2-x86-offline.run && chmod +x qt-linux-opensource-5.0.2-x86-offline.run && sudo ./qt-linux-opensource-5.0.2-x86-offline.run && sudo apt-get update && sudo apt-get install libglu1-mesa-dev -y; fi 
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
 
 script:
