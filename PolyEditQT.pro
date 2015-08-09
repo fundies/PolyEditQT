@@ -80,4 +80,4 @@ RESOURCES += \
     images.qrc \
     lisence.qrc
 
-LIBS +=  -lz -lquazip
+LIBS +=  -lz -lquazip5
