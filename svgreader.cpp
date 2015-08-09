@@ -18,7 +18,8 @@ SVGReader::SVGReader(const QString filename)
 
 }
 
-const SVG SVGReader::read() {
+const SVG SVGReader::read()
+{
     QFile xmlFile(_filename);
     xmlFile.open(QIODevice::ReadOnly);
     xml.setDevice(&xmlFile);
@@ -32,41 +33,31 @@ const SVG SVGReader::read() {
     if (xml.tokenType() == QXmlStreamReader::Invalid)
         xml.readNext();
 
-    if (xml.hasError()) {
+    if (xml.hasError())
         xml.raiseError();
-        qDebug() << "something may have went wrong";
-    }
 
     xmlFile.close();
 
     return mSVG;
 }
 
-bool SVGReader::processSVG() {
+bool SVGReader::processSVG()
+{
 
     bool ok = true;
 
-    ///int width = 0;
-    ///int height = 0;
 
     if (!xml.isStartElement() || xml.name() != "svg")
         return false;
 
-    qDebug() << xml.name();
     QXmlStreamAttributes attr = xml.attributes();
     for (auto a : attr)
     {
         if (a.name() == "x")
-        {
             xoffset = a.value().toInt(&ok, 10);
-        }
 
         if (a.name() == "y")
-        {
             yoffset = a.value().toInt(&ok, 10);
-        }
-
-        qDebug() << xml.name() << " :" << a.name() << "=" << a.value();
 
         if(!ok)
             return false;
@@ -76,22 +67,22 @@ bool SVGReader::processSVG() {
 
     switch(PolyEdit::hashit(xml.name().toString()))
     {
-    case PolyEdit::Polygon:
-    {
-        return proccessPolygon(xml.attributes());
-    }
-    case PolyEdit::Box:
-    {
-        return processBox(xml.attributes());
-    }
-    case PolyEdit::Circle:
-    {
-        return processCircle(xml.attributes());
-    }
-    case PolyEdit::Invalid:
-    {
-        return false;
-    }
+        case PolyEdit::Polygon:
+        {
+            return proccessPolygon(xml.attributes());
+        }
+        case PolyEdit::Box:
+        {
+            return processBox(xml.attributes());
+        }
+        case PolyEdit::Circle:
+        {
+            return processCircle(xml.attributes());
+        }
+        case PolyEdit::Invalid:
+        {
+            return false;
+        }
     }
 }
 
@@ -117,8 +108,6 @@ bool SVGReader::proccessPolygon(QXmlStreamAttributes attributes)
         return false;
     }
 
-    qDebug() << "points: " << points;
-
     QStringList p;
     p = points.split(" ", QString::SkipEmptyParts);
 
@@ -139,9 +128,6 @@ bool SVGReader::proccessPolygon(QXmlStreamAttributes attributes)
         int y = coord[1].toInt(&ok, 10);
         if (!ok)
             return false;
-
-        qDebug() << "x: " << x;
-        qDebug() << "y: " << y;
 
         coords.append(Coordinate(x+xoffset,-y-yoffset));
     }

@@ -1,15 +1,14 @@
+#include <QDebug>
+#include <functional>
+#include <iostream>
+#include <QOpenGLContext>
+
 #include "glwindow.h"
 #include "checkers.h"
 #include "canvas.h"
 #include "utility.h"
-#include <QDebug>
-
-#include <functional>
-#include <iostream>
-
+#include "qactions.h"
 #include "mainwindow.h"
-
-#include <QOpenGLContext>
 
 GLWindow::GLWindow(MainWindow *parent) : QMainWindow(parent)
 {
@@ -30,11 +29,6 @@ GLWindow::GLWindow(MainWindow *parent) : QMainWindow(parent)
     connect(mTimer, &QTimer::timeout, this, &GLWindow::incrementSubimg);
     connect(mActions->aPause, &QAction::triggered,  this, &GLWindow::pause);
     connect(mActions->aStop, &QAction::triggered,  this, &GLWindow::stop);
-}
-
-GLWindow::~GLWindow()
-{
-    //mCheckers.clear();
 }
 
 void GLWindow::render()
@@ -62,19 +56,17 @@ void GLWindow::play()
 void GLWindow::pause()
 {
     mTimer->stop();
-    //mToolBar->frame->setValue(static_cast<int>(subImg));
 }
 
 void GLWindow::stop()
 {
     mTimer->stop();
     subImg = 0;
-    //mToolBar->frame->setValue(0);
 }
 
 void GLWindow::incrementSubimg()
 {
-    //double speed = 60 *0.025;
+    // double speed = 60 * speed
     if (subImg < mSpr->count()-1 - 60*speed)
         subImg += 60*speed;
     else
@@ -83,12 +75,12 @@ void GLWindow::incrementSubimg()
 
 void GLWindow::zoomIn()
 {
-   setZoom(2);
+    setZoom(2);
 }
 
 void GLWindow::zoomOut()
 {
-   setZoom(0.5);
+    setZoom(0.5);
 }
 
 void GLWindow::zoom100()
@@ -115,23 +107,13 @@ void GLWindow::setZoom(double factor)
     if (mSpr != Q_NULLPTR)
         mSpr->scale(zoom);
 }
-double GLWindow::getSpeed() const
-{
-    return speed;
-}
 
 void GLWindow::setSpeed(double value)
 {
     speed = value;
 }
 
-
 QSharedPointer<QActions> GLWindow::actions() const
 {
     return mActions;
-}
-
-bool GLWindow::spriteExists() const
-{
-   return (mSpr != Q_NULLPTR);
 }

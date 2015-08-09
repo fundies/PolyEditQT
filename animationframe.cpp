@@ -1,9 +1,8 @@
-#include <QListView>
 #include <QVBoxLayout>
 #include <QSplitter>
-#include <QMenuBar>
 #include <QFileDialog>
 #include <QStatusBar>
+#include <QMessageBox>
 
 #include "spritemodel.h"
 #include "animationframe.h"
@@ -11,10 +10,10 @@
 #include "checkers.h"
 #include "canvas.h"
 #include "animationmenu.h"
-
-#include <QDebug>
-#include <QMessageBox>
-#include <iostream>
+#include "animationview.h"
+#include "yesnowidget.h"
+#include "mainwindow.h"
+#include "qactions.h"
 
 AnimationFrame::AnimationFrame(MainWindow *parent) : GLWindow(parent)
 {
@@ -86,7 +85,7 @@ AnimationFrame::AnimationFrame(MainWindow *parent) : GLWindow(parent)
     mSpr = Q_NULLPTR;
 }
 
-void AnimationFrame::setContents(const SpritePtr &spr)
+void AnimationFrame::setSprite(const SpritePtr &spr)
 {
     int width = (spr->isNull())? 0 : spr->mSubimg.first().img.width();
     int height = (spr->isNull())? 0 : spr->mSubimg.first().img.height();
@@ -94,13 +93,13 @@ void AnimationFrame::setContents(const SpritePtr &spr)
     mWidth->setText("Width: " + QString::number(width) + "px");
     mHeight->setText("Height: " + QString::number(height) + "px");
     mFrames->setText("Frames: " + QString::number(spr->count()));
-    mModel->setSpr(new Sprite(*spr));
-    mToolBar->frame->setMaximum(std::max(0, static_cast<int>(mModel->getSpr()->count())));
+    mModel->setSprite(new Sprite(*spr));
+    mToolBar->frame->setMaximum(std::max(0, static_cast<int>(mModel->getSprite()->count())));
 }
 
 void AnimationFrame::incrementSubimg()
 {
-    if (subImg < mModel->getSpr()->count()-1)
+    if (subImg < mModel->getSprite()->count()-1)
         subImg++;
     else
         subImg = 0;
@@ -110,10 +109,10 @@ void AnimationFrame::render()
 {
     GLWindow::render();
 
-    if (mModel->getSpr() != Q_NULLPTR && !mModel->getSpr()->isNull())
+    if (mModel->getSprite() != Q_NULLPTR && !mModel->getSprite()->isNull())
     {
         std::function<void()> s;
-        s = [this] { mModel->getSpr()->render(subImg); };
+        s = [this] { mModel->getSprite()->render(subImg); };
         mCanvas->draw(s, mCanvas->width()/2, mCanvas->height()/2);
     }
 }
@@ -122,13 +121,13 @@ void AnimationFrame::insertImage()
 {
     int pos = animator->getCursor();
 
-    if (pos == -1 && mModel->getSpr() != Q_NULLPTR)
-        pos = mModel->getSpr()->count();
+    if (pos == -1 && mModel->getSprite() != Q_NULLPTR)
+        pos = mModel->getSprite()->count();
 
     mModel->insertRows(pos, 1, QModelIndex());
 
-    mFrames->setText("Frames: " + QString::number(mModel->getSpr()->count()));
-    mToolBar->frame->setMaximum(std::max(0, static_cast<int>(mModel->getSpr()->count())));
+    mFrames->setText("Frames: " + QString::number(mModel->getSprite()->count()));
+    mToolBar->frame->setMaximum(std::max(0, static_cast<int>(mModel->getSprite()->count())));
 }
 
 void AnimationFrame::deleteImage()
@@ -142,51 +141,48 @@ void AnimationFrame::deleteImage()
         list = animator->getSelection();
     }
 
-    mFrames->setText("Frames: " + QString::number(mModel->getSpr()->count()));
-    mToolBar->frame->setMaximum(std::max(0, static_cast<int>(mModel->getSpr()->count())));
+    mFrames->setText("Frames: " + QString::number(mModel->getSprite()->count()));
+    mToolBar->frame->setMaximum(std::max(0, static_cast<int>(mModel->getSprite()->count())));
 }
 
 void AnimationFrame::cut()
 {
-    qDebug() << "cut";
     mClipboard->setMimeData(mModel->mimeData(animator->getSelection()));
     deleteImage();
 }
 
 void AnimationFrame::copy()
 {
-    qDebug() << "copy";
     mClipboard->setMimeData(mModel->mimeData(animator->getSelection()));
 }
 
 void AnimationFrame::paste()
 {
-    qDebug() << "paste";
     mModel->dropMimeData(mClipboard->mimeData(), Qt::CopyAction, animator->getCursor(), 0,  QModelIndex());
-    mFrames->setText("Frames: " + QString::number(mModel->getSpr()->count()));
+    mFrames->setText("Frames: " + QString::number(mModel->getSprite()->count()));
 }
 
 void AnimationFrame::setZoom(double factor)
 {
     GLWindow::setZoom(factor);
 
-    if (mModel->getSpr() != Q_NULLPTR)
-        mModel->getSpr()->scale(zoom);
+    if (mModel->getSprite() != Q_NULLPTR)
+        mModel->getSprite()->scale(zoom);
 }
 
 void AnimationFrame::exportStrip()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                                    "untitled.png",
-                                                    tr("Images (*.png *.bmp *.jpg)"),  0, QFileDialog::DontUseNativeDialog);
+                       "untitled.png",
+                       tr("Images (*.png *.bmp *.jpg)"),  0, QFileDialog::DontUseNativeDialog);
 
     if (!fileName.isEmpty())
-        mModel->getSpr()->exportStrip(fileName);
+        mModel->getSprite()->exportStrip(fileName);
 }
 
 void AnimationFrame::submit()
 {
-    mParent->setSpr(mModel->getSpr());
+    mParent->setSprite(mModel->getSprite());
     close();
 }
 
@@ -199,12 +195,12 @@ void AnimationFrame::cancel()
 void AnimationFrame::import()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Open Image"), QString(), tr("Image Files (*.png *.jpg *.bmp"), 0, QFileDialog::DontUseNativeDialog);
+                       tr("Open Image"), QString(), tr("Image Files (*.png *.jpg *.bmp"), 0, QFileDialog::DontUseNativeDialog);
     QImage img = QImage(fileName);
 
     if (!img.isNull())
     {
-        if(mModel->getCurrentSize() != img.size() && !mModel->getSpr()->isNull())
+        if(mModel->getCurrentSize() != img.size() && !mModel->getSprite()->isNull())
         {
             QString error = QString("Image dimensions must match\n") + "Source: " + QString::number(img.size().rwidth()) + "x" + QString::number(img.size().rheight()) +"\n" + "Target: " + QString::number(mModel->getCurrentSize().rwidth()) + "x" + QString::number(mModel->getCurrentSize().rheight());
 
@@ -217,7 +213,7 @@ void AnimationFrame::import()
         int pos = animator->getCursor();
 
         if (pos == -1)
-            pos = mModel->getSpr()->count();
+            pos = mModel->getSprite()->count();
 
         insertImage();
         QModelIndex idx = mModel->index(pos, 0, QModelIndex());

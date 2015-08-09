@@ -1,7 +1,8 @@
-#include "maskcombobox.h"
-#include <iostream>
 #include <QCheckBox>
 #include <QHBoxLayout>
+
+#include "maskcombobox.h"
+#include "table.h"
 
 MaskComboBox::MaskComboBox(Table *parent) : QWidget(parent)//QComboBox(parent)
 {

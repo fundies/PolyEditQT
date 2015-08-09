@@ -1,11 +1,11 @@
-#include "yesnowidget.h"
-
 #include <QHBoxLayout>
 #include <QDebug>
 
+#include "yesnowidget.h"
+
 YesNoWidget::YesNoWidget(QWidget *parent) : QWidget(parent)
 {
-    QHBoxLayout* layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
     setLayout(layout);
 
     mYes = new QPushButton("Subimt", this);

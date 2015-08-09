@@ -5,7 +5,7 @@
 
 ImageBounds::ImageBounds(QWidget *parent) : QWidget(parent)
 {
-    QGridLayout* layout = new QGridLayout();
+    QGridLayout *layout = new QGridLayout();
     layout->setSizeConstraint(QLayout::SetFixedSize);
 
     ///Todo: make this align top

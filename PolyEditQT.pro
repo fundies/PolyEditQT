@@ -67,7 +67,8 @@ HEADERS  += mainwindow.h \
     yesnowidget.h \
     svgreader.h \
     aboutframe.h \
-    imageframe.h
+    imageframe.h \
+    shapes.h
 
 CONFIG += c++11
 

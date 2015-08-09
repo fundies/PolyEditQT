@@ -39,37 +39,55 @@ public:
      * @brief getXsep returns horizontal seperation
      * @return horizontal seperation
      */
-    int getXsep() {return mXsep;}
+    int getXsep()
+    {
+        return mXsep;
+    }
 
     /**
      * @brief getYsep returns vertical seperation
      * @return vertical seperation
      */
-    int getYsep() {return mYSep;}
+    int getYsep()
+    {
+        return mYSep;
+    }
 
     /**
      * @brief getXoffset returns x offset
      * @return x offset
      */
-    int getXoffset() {return mXoffset;}
+    int getXoffset()
+    {
+        return mXoffset;
+    }
 
     /**
      * @brief getYoffset returns y offset
      * @return y offset
      */
-    int getYoffset() {return mYoffset;}
+    int getYoffset()
+    {
+        return mYoffset;
+    }
 
     /**
      * @brief setXoffset set the x offset
      * @param x new x offset
      */
-    void setXoffset(int x) {mXoffset = x;}
+    void setXoffset(int x)
+    {
+        mXoffset = x;
+    }
 
     /**
      * @brief setYoffset set the y offset
      * @param y new y offset
      */
-    void setYoffset(int y) {mYoffset = y;}
+    void setYoffset(int y)
+    {
+        mYoffset = y;
+    }
 
     /**
      * @brief setSize resize method for Canvas' grid
@@ -100,19 +118,20 @@ public:
      */
     void render();
 
+    /**
+     * @brief setAlwaysVisible makes the grid's lines invert background color
+     * @param value true/false
+     */
     void setAlwaysVisible(bool value);
 
 private:
 
     QList<Coordinate> mcs;
     bool alwaysVisible;
-
     int mXsep = 0;
     int mYSep = 0;
-
     int mXoffset = 0;
     int mYoffset = 0;
-
     int mXrepeat = 0;
     int mYRepeat = 0;
 };

@@ -1,6 +1,6 @@
-#include "grid.h"
 #include <QGLWidget>
-#include <iostream>
+
+#include "grid.h"
 
 Grid::Grid(int xSep, int ySep, int canvasW, int canvasH)
 {
@@ -72,7 +72,8 @@ void Grid::setSize(int xoff, int yoff, int xSep, int ySep, int canvasW, int canv
     }
 }
 
-void Grid::setSize(unsigned int width, unsigned int height, unsigned int rows, unsigned int columns, unsigned int xSep, unsigned int ySep) {
+void Grid::setSize(unsigned int width, unsigned int height, unsigned int rows, unsigned int columns, unsigned int xSep, unsigned int ySep)
+{
 
     // Delete previous grid
     mcs.clear();
@@ -81,8 +82,10 @@ void Grid::setSize(unsigned int width, unsigned int height, unsigned int rows, u
     int w = (int)width / columns;
     int h = (int)height / rows;
 
-    for(size_t i = 0; i < rows; i++) {
-        for(size_t j = 0; j < columns; j++) {
+    for(size_t i = 0; i < rows; i++)
+    {
+        for(size_t j = 0; j < columns; j++)
+        {
             // Added counter clockwise
             Coordinate w2(w * j + xSep, h * i + ySep);
             Coordinate x(w * j + xSep, h * (i + 1) - ySep);

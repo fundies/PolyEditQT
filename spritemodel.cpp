@@ -1,10 +1,11 @@
-#include "spritemodel.h"
-
 #include <QDebug>
 #include <QMimeData>
 #include <QInputDialog>
 
-SpriteModel::SpriteModel(QWidget * parent) : QAbstractListModel(parent)
+#include "spritemodel.h"
+
+
+SpriteModel::SpriteModel(QWidget *parent) : QAbstractListModel(parent)
 {
     mParent = parent;
     mSpr = Q_NULLPTR;
@@ -17,11 +18,11 @@ bool SpriteModel::insertRows(int position, int rows, const QModelIndex &parent)
     {
         bool ok1;
         int width = QInputDialog::getInt(mParent, tr("Input Width"),
-                                     tr("Width:"), 25, 1, 2147483647, 1, &ok1);
+                                         tr("Width:"), 25, 1, 2147483647, 1, &ok1);
 
         bool ok2;
         int height = QInputDialog::getInt(mParent, tr("Input Height"),
-                                     tr("Height:"), 25, 1, 2147483647, 1, &ok2);
+                                          tr("Height:"), 25, 1, 2147483647, 1, &ok2);
         if (!ok1 || !ok2)
             insertRows(position, rows, parent);
 
@@ -34,9 +35,8 @@ bool SpriteModel::insertRows(int position, int rows, const QModelIndex &parent)
 
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
-    for (int row = 0; row < rows; ++row) {
+    for (int row = 0; row < rows; ++row)
         mSpr->mSubimg.insert(position, mDefault);
-    }
 
     endInsertRows();
     return true;
@@ -48,9 +48,8 @@ bool SpriteModel::removeRows(int position, int rows, const QModelIndex &parent)
 
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
-    for (int row = 0; row < rows; ++row) {
+    for (int row = 0; row < rows; ++row)
         mSpr->mSubimg.removeAt(position);
-    }
 
     endRemoveRows();
     return true;
@@ -66,7 +65,7 @@ bool SpriteModel::setData(const QModelIndex &index, const QVariant &value, int r
     return true;
 }
 
-int SpriteModel::rowCount(const QModelIndex & parent) const
+int SpriteModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     if (mSpr != nullptr)
@@ -75,7 +74,7 @@ int SpriteModel::rowCount(const QModelIndex & parent) const
         return 0;
 }
 
-QVariant SpriteModel::data(const QModelIndex & index, int role) const
+QVariant SpriteModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DecorationRole)
         return mSpr->mSubimg[index.row()].img;
@@ -86,7 +85,7 @@ QVariant SpriteModel::data(const QModelIndex & index, int role) const
 }
 
 bool SpriteModel::dropMimeData(const QMimeData *data,
-    Qt::DropAction action, int row, int column, const QModelIndex &parent)
+                               Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     qDebug() << "dropMimeData()";
 
@@ -114,7 +113,8 @@ bool SpriteModel::dropMimeData(const QMimeData *data,
     QList<QVariant> newItems;
     int rows = 0;
 
-    while (!stream.atEnd()) {
+    while (!stream.atEnd())
+    {
         QVariant img;
         stream >> img;
         newItems.append(img);
@@ -152,8 +152,10 @@ QMimeData *SpriteModel::mimeData(const QModelIndexList &indexes) const
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
     QVariant img;
-    foreach (const QModelIndex &index, indexes) {
-        if (index.isValid()) {
+    foreach (const QModelIndex &index, indexes)
+    {
+        if (index.isValid())
+        {
             img = data(index, Qt::DecorationRole);
             stream << img;
         }
@@ -169,13 +171,12 @@ QStringList SpriteModel::mimeTypes() const
     return QStringList("PolyEdit/DnD");
 }
 
-SpritePtr SpriteModel::getSpr() const
+SpritePtr SpriteModel::getSprite() const
 {
     return mSpr;
 }
 
-
-void SpriteModel::setSpr(const SpritePtr &spr)
+void SpriteModel::setSprite(const SpritePtr &spr)
 {
     beginResetModel();
 
@@ -189,7 +190,6 @@ void SpriteModel::setSpr(const SpritePtr &spr)
 
     endResetModel();
 }
-
 
 Qt::DropActions SpriteModel::supportedDropActions() const
 {

@@ -4,16 +4,18 @@
 #include <QFile>
 #include <QXmlStreamWriter>
 
-namespace PolyEdit {
-Shape hashit (QString const& inString) {
-    if (inString == "polyline") return Polygon;
-    if (inString == "circle") return Circle;
-    if (inString == "rect") return Box;
-    return Invalid;
-}
+namespace PolyEdit
+{
+    Shape hashit (QString const &inString)
+    {
+        if (inString == "polyline") return Polygon;
+        if (inString == "circle") return Circle;
+        if (inString == "rect") return Box;
+        return Invalid;
+    }
 }
 
-Mask::Mask(QOpenGLWidget* parent)
+Mask::Mask(QOpenGLWidget *parent)
 {
     mParent = parent;
     mRadius = 0;
@@ -77,9 +79,7 @@ void Mask::render()
         int steps = 30;
 
         for (auto i : mcs)
-        {
             drawCircle(Coordinate(i.rx() * xscale, -i.ry() * yscale), 5, steps, false);
-        }
     }
 
     // Reset to white
@@ -181,7 +181,7 @@ void Mask::setBox(int left, int top, int width, int height)
     mType = PolyEdit::Box;
 }
 
-const Coordinate& Mask::getc(int index) const
+const Coordinate &Mask::getc(int index) const
 {
     return mcs[index];
 }
@@ -210,16 +210,28 @@ void Mask::exportSVG(QString fpath)
 
     QList<Coordinate>::iterator result;
 
-    result = std::min_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b) {return a.rx() < b.rx();});
+    result = std::min_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b)
+    {
+        return a.rx() < b.rx();
+    });
     int minX = result->rx();
 
-    result = std::max_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b) {return a.rx() < b.rx();});
+    result = std::max_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b)
+    {
+        return a.rx() < b.rx();
+    });
     int maxX = result->rx();
 
-    result = std::min_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b) {return -a.ry() < -b.ry();});
+    result = std::min_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b)
+    {
+        return -a.ry() < -b.ry();
+    });
     int minY = -result->ry();
 
-    result = std::max_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b) {return -a.ry() < -b.ry();});
+    result = std::max_element(mcs.begin(), mcs.end(), [](Coordinate &a, Coordinate &b)
+    {
+        return -a.ry() < -b.ry();
+    });
     int maxY = -result->ry();
 
     unsigned int width; //= std::abs(maxX - minX);
@@ -238,10 +250,11 @@ void Mask::exportSVG(QString fpath)
 
 
     QFile data(fpath);
-    if (data.open(QFile::WriteOnly | QFile::Truncate)) {
+    if (data.open(QFile::WriteOnly | QFile::Truncate))
+    {
 
         QString style = "fill:none;stroke:black;stroke-width:1";
-                //style="fill:none;stroke:black;stroke-width:1"
+        //style="fill:none;stroke:black;stroke-width:1"
 
         QXmlStreamWriter stream(&data);
         stream.setAutoFormatting(true);
@@ -255,45 +268,43 @@ void Mask::exportSVG(QString fpath)
 
         switch(mType)
         {
-        case PolyEdit::Polygon:
-        {
-            QString points;
-            for (auto i : mcs)
+            case PolyEdit::Polygon:
             {
-                points += QString::number(i.rx() - minX) + ","  + QString::number(-i.ry() - minY) + " ";
+                QString points;
+                for (auto i : mcs)
+                    points += QString::number(i.rx() - minX) + ","  + QString::number(-i.ry() - minY) + " ";
+
+                points = points.trimmed();
+
+                stream.writeStartElement("polyline");
+                stream.writeAttribute("points", points);
+                stream.writeAttribute("style", style);
+                stream.writeEndElement(); // polyline
+                break;
             }
-
-            points = points.trimmed();
-
-            stream.writeStartElement("polyline");
-            stream.writeAttribute("points", points);
-            stream.writeAttribute("style", style);
-            stream.writeEndElement(); // polyline
-            break;
-        }
-        case PolyEdit::Box:
-        {
-            stream.writeStartElement("rect");
-            stream.writeAttribute("width", QString::number(width));
-            stream.writeAttribute("height", QString::number(height));
-            stream.writeAttribute("style", style);
-            stream.writeEndElement(); // rect
-            break;
-        }
-        case PolyEdit::Circle:
-        {
-            stream.writeStartElement("circle");
-            stream.writeAttribute("cx", QString::number(mRadius));
-            stream.writeAttribute("cy", QString::number(mRadius));
-            stream.writeAttribute("r", QString::number(mRadius));
-            stream.writeAttribute("style", style);
-            stream.writeEndElement(); // circle
-            break;
-        }
-        case PolyEdit::Invalid:
-        {
-            break;
-        }
+            case PolyEdit::Box:
+            {
+                stream.writeStartElement("rect");
+                stream.writeAttribute("width", QString::number(width));
+                stream.writeAttribute("height", QString::number(height));
+                stream.writeAttribute("style", style);
+                stream.writeEndElement(); // rect
+                break;
+            }
+            case PolyEdit::Circle:
+            {
+                stream.writeStartElement("circle");
+                stream.writeAttribute("cx", QString::number(mRadius));
+                stream.writeAttribute("cy", QString::number(mRadius));
+                stream.writeAttribute("r", QString::number(mRadius));
+                stream.writeAttribute("style", style);
+                stream.writeEndElement(); // circle
+                break;
+            }
+            case PolyEdit::Invalid:
+            {
+                break;
+            }
         }
 
         stream.writeEndElement(); // svg

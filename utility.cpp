@@ -50,7 +50,7 @@ int getFactor(int number)
         {
             int tempDis = (root - i);
             if (tempDis < dist)
-                  result = i;
+                result = i;
         }
     }
     return result;
@@ -74,9 +74,8 @@ void drawCircle(Coordinate c, int radius, int steps, bool outline)
     else
         glBegin(GL_LINE_LOOP);
 
-    for (int i = 0; i <= steps; i++) {
+    for (int i = 0; i <= steps; i++)
         glVertex2f(x + cos(i * M_PI * 2 / steps) * radius, y - sin(i * M_PI * 2 / steps) * radius);
-    }
 
     glEnd();
 }

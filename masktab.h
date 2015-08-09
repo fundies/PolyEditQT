@@ -2,11 +2,11 @@
 #define MASKTAB_H
 
 #include <QTabWidget>
-//#include <QTabBar>
 #include <QList>
 
-#include "mainwindow.h"
-#include "maskwidget.h"
+class MainWindow;
+class Canvas;
+class Table;
 
 /**
  * @brief The MaskTab class
@@ -28,7 +28,7 @@ public:
      * @brief tabBar override tabBar() to enable colored headers
      * @return QTabBar
      */
-    QTabBar* tabBar();
+    QTabBar *tabBar();
 
     /**
      * @brief table return's a cer to map of tables[]
@@ -36,10 +36,27 @@ public:
      */
     QList<Table *> *table() const;
 
-    Table* currentTable();
+    /**
+     * @brief currentTable returns the current table
+     * @return pointer to table
+     */
+    Table *currentTable();
 
-    void addTab(Table* table);
+    /**
+     * @brief addTab adds a new tab/mask
+     * @param table table to use
+     */
+    void addTab(Table *table);
+
+    /**
+     * @brief replaceCurrentTable replaces a table
+     * @param t table
+     */
     void replaceCurrentTable(Table *t);
+
+    /**
+     * @brief clear remove all tabs
+     */
     void clear();
 
 public slots:
@@ -63,12 +80,9 @@ private:
      */
     void addTab();
 
-    //QMap<QString, Table *> *mTable;
-    QList<Table*> *mTable;
-
-    Canvas* mCanvas;
-    MainWindow* mParent;
-
+    QList<Table *> *mTable;
+    Canvas *mCanvas;
+    MainWindow *mParent;
     bool deleting;
     int numMask;
 };

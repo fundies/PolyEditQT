@@ -12,7 +12,7 @@ QImage createCheckers()
     quint32 i = 0;
     bool light = true;
 
-    uchar* data = new uchar[width * height * 4];
+    uchar *data = new uchar[width * height * 4];
 
     for (quint32 j = 0; j < checkCount; ++j)
     {

@@ -1,9 +1,10 @@
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
-#include "mainwindow.h"
 #include <QToolBar>
 #include <QSpinBox>
+
+class MainWindow;
 
 /**
  * @brief The ToolBar class
@@ -17,10 +18,10 @@ public:
      */
     ToolBar(MainWindow *parent);
 
-    QSpinBox* gridX;
-    QSpinBox* gridY;
-    QSpinBox* frame;
-    QDoubleSpinBox* speed;
+    QSpinBox *gridX;
+    QSpinBox *gridY;
+    QSpinBox *frame;
+    QDoubleSpinBox *speed;
 
 };
 

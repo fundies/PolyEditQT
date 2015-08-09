@@ -1,5 +1,6 @@
 #include "animationmenu.h"
 #include "animationframe.h"
+#include "qactions.h"
 
 AnimationMenu::AnimationMenu(AnimationFrame *parent) : QMenuBar(parent)
 {

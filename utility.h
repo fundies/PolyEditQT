@@ -3,7 +3,18 @@
 
 #include "coordinate.h"
 
+/**
+ * @brief random_string generates random string
+ * @param length length of string
+ * @return string
+ */
 QString random_string(size_t length);
+
+/**
+ * @brief getFactor get factor of number
+ * @param number number
+ * @return factor
+ */
 int getFactor(int number);
 
 /**
@@ -50,7 +61,8 @@ template <typename T>
  * @param value
  * @return sign
  */
-int sign(T value) {
+int sign(T value)
+{
     return (T(0) < value) - (value < T(0));
 }
 

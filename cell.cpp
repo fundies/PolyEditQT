@@ -5,12 +5,12 @@ Cell::Cell() : QTableWidgetItem()
     // nothing to do here
 }
 
-Cell::Cell(const QString & text, int type) : QTableWidgetItem(text, type)
+Cell::Cell(const QString &text, int type) : QTableWidgetItem(text, type)
 {
     last = text;
 }
 
-void Cell::setText(const QString & text)
+void Cell::setText(const QString &text)
 {
     /* Update the cell's text only if it is an integer
      * revert to previous content otherwise

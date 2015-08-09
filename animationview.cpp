@@ -3,7 +3,7 @@
 
 #include <QPainter>
 
-AnimationView::AnimationView(QWidget* parent) : QListView(parent)
+AnimationView::AnimationView(QWidget *parent) : QListView(parent)
 {
     setResizeMode(QListView::Adjust);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -20,7 +20,7 @@ AnimationView::AnimationView(QWidget* parent) : QListView(parent)
 int AnimationView::getCursor() const
 {
     if (selectedIndexes().isEmpty())
-            return -1;
+        return -1;
     else
         return selectedIndexes()[0].row();
 }

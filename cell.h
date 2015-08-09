@@ -20,14 +20,14 @@ public:
      * @param text text
      * @param type type
      */
-    Cell(const QString & text, int type = Type);
+    Cell(const QString &text, int type = Type);
 
     /**
      * @brief setText overide for QTableWidgetItem::setText
      * which ensures input is an integer
      * @param text input text
      */
-    void setText(const QString & text);
+    void setText(const QString &text);
 
     /**
      * @brief getInt returns Cell's content as an integer

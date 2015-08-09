@@ -1,7 +1,8 @@
-#include "toolbar.h"
 #include <QSpinBox>
 
-/// Todo: make this look nicer on small sizes?
+#include "mainwindow.h"
+#include "toolbar.h"
+#include "qactions.h"
 
 ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
 {
@@ -13,12 +14,6 @@ ToolBar::ToolBar(MainWindow *parent) : QToolBar(parent)
     addAction(parent->actions()->aSaveAs);
 
     addSeparator();
-
-    //addAction(parent->actions()->aCut);
-    //addAction(parent->actions()->aCopy);
-    //addAction(parent->actions()->aPaste);
-
-    //addSeparator();
 
     addAction(parent->actions()->aViewGrid);
 

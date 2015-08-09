@@ -2,10 +2,13 @@
 #define TABLE_H
 
 #include <QTableWidget>
-#include <QHeaderView>
 #include <QOpenGLWidget>
-#include "cell.h"
-#include "mask.h"
+
+#include "coordinate.h"
+#include "shapes.h"
+
+class Cell;
+class Mask;
 
 /**
  * @brief The Table class is the main modifier widget for masks
@@ -76,20 +79,43 @@ public:
      */
     int getRadius() const;
 
+    /**
+     * @brief setRadius set the radius
+     * @param radius radius
+     */
     void setRadius(int radius);
+
+    /**
+     * @brief setBoxSize set the box size
+     * @param width width
+     * @param height height
+     */
     void setBoxSize(int width, int height);
 
-    // Todo : replace with overload
-    const Coordinate getc(int i) const;
+    /**
+     * @brief getcoordinate get coordinate
+     * @param i index
+     * @return coordinate
+     */
+    const Coordinate getcoordinate(int i) const;
 
-    /*const Coordinate& operator[](int i) const
-    {
-        return mMask->getc(i);
-    }*/
-
+    /**
+     * @brief scale set the scale
+     * @param factor factor
+     */
     void scale(double factor);
-        void exportSVG(QString fpath);
-        void setRender(bool state);
+
+    /**
+     * @brief exportSVG export SVG
+     * @param fpath file path
+     */
+    void exportSVG(QString fpath);
+
+    /**
+     * @brief setRender enable drawing
+     * @param state true/false
+     */
+    void setRender(bool state);
 
 private slots:
 
@@ -97,7 +123,7 @@ private slots:
      * @brief itemChanged cell selection changed
      * @param item new cell
      */
-    void itemChanged(QTableWidgetItem * item);
+    void itemChanged(QTableWidgetItem *item);
 
 private:
 
@@ -107,7 +133,7 @@ private:
      * @param column column
      * @return cell*
      */
-    Cell* getItem(int row, int column) const;
+    Cell *getItem(int row, int column) const;
 
     /**
      * @brief insertRow override for insertRow()
@@ -119,11 +145,11 @@ private:
      * @brief keyPressEvent override for keypress
      * @param event event
      */
-    void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent *event);
 
-    bool isReady;
-    Mask* mMask;
+    Mask *mMask;
     PolyEdit::Shape mType;
+    bool isReady;
     bool mRender;
 };
 

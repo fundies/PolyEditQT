@@ -1,11 +1,12 @@
 #include <GL/glu.h>
-
 #include <QMouseEvent>
-//#include <iostream>
 
+#include "glwindow.h"
+#include "mainwindow.h"
+#include "imageframe.h"
+#include "animationframe.h"
 #include "canvas.h"
-//#include "mainwindow.h"
-//#include "imageloader.h"
+
 
 Canvas::Canvas(AnimationFrame *parent)
     : QOpenGLWidget(parent)
@@ -120,13 +121,13 @@ QSize Canvas::sizeHint() const
 
 }
 
-void Canvas::mouseMoveEvent(QMouseEvent * event)
+void Canvas::mouseMoveEvent(QMouseEvent *event)
 {
     if (mMainW != Q_NULLPTR)
         mousePos = event->pos();
 }
 
-void Canvas::mousePressEvent(QMouseEvent * event)
+void Canvas::mousePressEvent(QMouseEvent *event)
 {
     if (mMainW != Q_NULLPTR)
     {

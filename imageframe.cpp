@@ -1,11 +1,12 @@
 #include <QHBoxLayout>
 #include <QScrollArea>
-#include <iostream>
 
-#include "imageloader.h"
+#include "imageframe.h"
 #include "imagebounds.h"
 #include "checkers.h"
 #include "mainwindow.h"
+#include "canvas.h"
+#include "grid.h"
 
 ImageFrame::ImageFrame(MainWindow *parent, QImage &image) : GLWindow(parent)
 {
@@ -62,8 +63,7 @@ ImageFrame::ImageFrame(MainWindow *parent, QImage &image) : GLWindow(parent)
 
 void ImageFrame::import()
 {
-    qDebug() << mSpr->genSubimg(mSpnRows, mSpnColumns, mSpnX, mSpnY);
-    mParent->setSpr(mSpr);
+    mParent->setSprite(mSpr);
     close();
 }
 
@@ -95,9 +95,7 @@ void ImageFrame::setColor()
 
 void ImageFrame::setAlpha(const QColor &color)
 {
-mSpr->setAlpha(color);
-    //std::cout << color.name().toStdString() << std::endl;
-    //bounds->btnAlpha->setStyleSheet("QPushButton {background-color: " + color.name() + ";}");
+    mSpr->setAlpha(color);
 }
 
 void ImageFrame::setSpnRows(int i)
@@ -126,10 +124,10 @@ void ImageFrame::setSpnY(int i)
 
 void ImageFrame::updateGrid()
 {
-   mGrid->setSize(mSpr->width(), mSpr->height(), mSpnRows, mSpnColumns, mSpnX, mSpnY);
+    mGrid->setSize(mSpr->width(), mSpr->height(), mSpnRows, mSpnColumns, mSpnX, mSpnY);
 }
 
-void ImageFrame::setSpr(const SpritePtr &spr)
+void ImageFrame::setSprite(const SpritePtr &spr)
 {
     mSpr = spr;
 }

@@ -1,22 +1,24 @@
-#include "mainwindow.h"
-#include "menubar.h"
-#include "toolbar.h"
-
 #include <QLayout>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <quazip/JlCompress.h>
-#include <QDebug>
+#include <QMessageBox>
 
+#include "mainwindow.h"
+#include "menubar.h"
+#include "toolbar.h"
+#include "grid.h"
 #include "utility.h"
 #include "canvas.h"
-#include "imageloader.h"
+#include "imageframe.h"
+#include "animationframe.h"
 #include "masktab.h"
 #include "aboutframe.h"
-
-#include <QMessageBox>
+#include "qactions.h"
+#include "svgreader.h"
+#include "table.h"
 
 MainWindow::MainWindow(QWidget *parent) : GLWindow()
 {
@@ -158,19 +160,17 @@ const Coordinate MainWindow::mapToReal(Coordinate c)
     return Coordinate(x,y);
 }
 
-void MainWindow::setSpr(const SpritePtr &spr)
+void MainWindow::setSprite(const SpritePtr &spr)
 {
     mSpr = spr;
 
     mToolBar->frame->setMaximum(std::max(0, static_cast<int>(spr->count()-1)));
 
-    qDebug() << spr->count()-1;
-
     if (animationEdit == Q_NULLPTR)
         animationEdit = new AnimationFrame(this);
 
     //if (imgLoader != Q_NULLPTR)
-      //  imgLoader->setSpr(spr);
+    //  imgLoader->setSpr(spr);
 }
 
 
@@ -192,7 +192,7 @@ void MainWindow::addCoord(Coordinate c)
     currentMask->addCoord(c);
 }
 
-void MainWindow::setMask(Table* mask)
+void MainWindow::setMask(Table *mask)
 {
     currentMask = mask;
 }
@@ -200,27 +200,21 @@ void MainWindow::setMask(Table* mask)
 void MainWindow::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Open Image"), QString(), tr("Image Files (*.png *.jpg *.bmp *.svg *.spr)"), 0, QFileDialog::DontUseNativeDialog);
+                       tr("Open Image"), QString(), tr("Image Files (*.png *.jpg *.bmp *.svg *.spr)"), 0, QFileDialog::DontUseNativeDialog);
 
     QFileInfo f(fileName);
     if(f.suffix() == "svg")
-    {
         openSVG(fileName);
-    }
     else if(f.suffix() == "spr")
-    {
         openSpr(fileName);
-    }
     else
-    {
         openImage(fileName);
-    }
 
 }
 
 void MainWindow::addMask(SVG &svg)
 {
-    Table* t = new Table(this, mCanvas);
+    Table *t = new Table(this, mCanvas);
     t->setMaskType(svg.getType());
 
     if (mTabs->currentTable()->size() > 0)
@@ -229,20 +223,13 @@ void MainWindow::addMask(SVG &svg)
         mTabs->replaceCurrentTable(t);
 
     for (auto c : svg.getCoords())
-    {
         t->addCoord(c);
-    }
 
     if(svg.getType() == PolyEdit::Circle)
         t->setRadius(svg.getRadius());
 
     if(svg.getType() == PolyEdit::Box)
-    {
-
-        qDebug() << svg.getWidth();
-        qDebug() << svg.getHeight();
         t->setBoxSize(svg.getWidth(), svg.getHeight());
-    }
 
     setMask(t);
 
@@ -262,9 +249,7 @@ void MainWindow::openImage(QString fpath)
         img = QImage(fpath);
 
     if (!img.isNull() && imgLoader == Q_NULLPTR)
-    {
         delete imgLoader;
-    }
 
     if (!img.isNull())
     {
@@ -285,7 +270,7 @@ void MainWindow::openImage(QString fpath, int rows, int columns)
 
     Sprite *spr = new Sprite(img);
     spr->genSubimg(rows, columns, 0, 0);
-    setSpr(spr);
+    setSprite(spr);
 }
 
 void MainWindow::save()
@@ -293,8 +278,8 @@ void MainWindow::save()
     if (saveFile.isEmpty())
     {
         saveFile = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                                        "untitled.spr",
-                                                        tr("Sprite (*.spr)"),  0, QFileDialog::DontUseNativeDialog);
+                                                "untitled.spr",
+                                                tr("Sprite (*.spr)"),  0, QFileDialog::DontUseNativeDialog);
     }
 
     QString workDir = QDir::temp().path() + "/" + random_string(5) + "/";
@@ -306,7 +291,8 @@ void MainWindow::save()
         mSpr->exportStrip(workDir + "image.png");
 
         QFile data(workDir + "image.xml");
-        if (data.open(QFile::WriteOnly | QFile::Truncate)) {
+        if (data.open(QFile::WriteOnly | QFile::Truncate))
+        {
             QXmlStreamWriter stream(&data);
             stream.setAutoFormatting(true);
             stream.writeStartDocument();
@@ -326,7 +312,6 @@ void MainWindow::save()
         for (auto i : *table)
         {
             QString f = workDir + QString::number(m) + ".svg";
-            qDebug() << f;
             i->exportSVG(f);
             m++;
         }
@@ -340,8 +325,8 @@ void MainWindow::save()
 void MainWindow::saveAs()
 {
     QString temp = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                                    "untitled.spr",
-                                                    tr("Sprite (*.spr)"),  0, QFileDialog::DontUseNativeDialog);
+                   "untitled.spr",
+                   tr("Sprite (*.spr)"),  0, QFileDialog::DontUseNativeDialog);
     if (!temp.isEmpty())
     {
         saveFile = temp;
@@ -371,17 +356,12 @@ void MainWindow::openSpr(QString fpath)
             QFile xmlFile(file.absoluteFilePath());
             xmlFile.open(QIODevice::ReadOnly);
             xml.setDevice(&xmlFile);
-            //if (!xml.isStartElement() || xml.name() != "image")
-            //  return;
-
             xml.readNextStartElement();
 
             QString image;
             int rows;
             int columns;
             bool ok;
-
-            qDebug() << xml.name();
 
             for(auto a: xml.attributes())
             {
@@ -396,7 +376,6 @@ void MainWindow::openSpr(QString fpath)
             }
 
             openImage(workDir + image, rows, columns);
-            qDebug() << "image: " << image << "rows: " << rows << "columns: " << columns;
         }
     }
 }
@@ -404,22 +383,16 @@ void MainWindow::openSpr(QString fpath)
 void MainWindow::editSprite()
 {
     if (imgLoader != Q_NULLPTR)
-    {
         delete imgLoader;
-    }
 
     if (!mSpr->isNull())
     {
-        //QFileInfo f(fpath);
         QImage img = mSpr->generateStrip();
         imgLoader = new ImageFrame(this, img);
-        //imgLoader->setWindowTitle(f.fileName());
         imgLoader->show();
     }
     else
-    {
         open();
-    }
 }
 
 void MainWindow::editAnimation()
@@ -427,7 +400,7 @@ void MainWindow::editAnimation()
     if (animationEdit == Q_NULLPTR)
         animationEdit = new AnimationFrame(this);
 
-    animationEdit->setContents(mSpr);
+    animationEdit->setSprite(mSpr);
     animationEdit->show();
 }
 
@@ -467,7 +440,7 @@ void MainWindow::setZoom(double factor)
 void MainWindow::reset()
 {
     delete mSpr;
-    setSpr(new Sprite());
+    setSprite(new Sprite());
     table->clear();
     mTabs->clear();
 }

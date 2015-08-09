@@ -3,25 +3,9 @@
 
 #include <QList>
 #include <QOpenGLWidget>
+
 #include "coordinate.h"
-
-
-/// Todo: subclass these using inhertience?
-
-/**
- * Shapes enum
- */
-namespace PolyEdit {
-typedef enum Shape
-{
-    Polygon = 0,
-    Circle = 1,
-    Box = 2,
-    Invalid = -1
-} Shape;
-
-Shape hashit (QString const& inString);
-}
+#include "shapes.h"
 
 /**
  * @brief The Mask class
@@ -33,7 +17,7 @@ public:
      * @brief Mask Constructor
      * @param parent parent
      */
-    Mask(QOpenGLWidget* parent);
+    Mask(QOpenGLWidget *parent);
 
     /**
      * @brief addc add c
@@ -97,7 +81,7 @@ public:
      * @param i index
      * @return coordinate[index]
      */
-    const Coordinate& getc(int index) const;
+    const Coordinate &getc(int index) const;
 
     /**
      * @brief getRadius returns radius if type == circle
@@ -117,19 +101,33 @@ public:
      */
     void setType(const PolyEdit::Shape &type);
 
+    /**
+     * @brief scale sets the scale
+     * @param scale scale
+     */
     void scale(float scale);
+
+    /**
+     * @brief scale sets the scale
+     * @param x xscale
+     * @param y yscale
+     */
     void scale(float x, float y);
+
+    /**
+     * @brief exportSVG exports mask to SVG file
+     * @param fpath file path
+     */
     void exportSVG(QString fpath);
 
 private:
 
+    QList<Coordinate> mcs;
+    QOpenGLWidget *mParent;
+    PolyEdit::Shape mType;
     float xscale;
     float yscale;
-
-    QList<Coordinate> mcs;
-    QOpenGLWidget* mParent;
     int mRadius;
-    PolyEdit::Shape mType;
 };
 
 #endif // MASK_H

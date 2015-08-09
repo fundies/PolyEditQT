@@ -1,5 +1,6 @@
 #include "animationtoolbar.h"
 #include "animationframe.h"
+#include "qactions.h"
 
 #include <QSpinBox>
 #include <QDoubleSpinBox>

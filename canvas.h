@@ -5,10 +5,11 @@
 #include <functional>
 
 #include "coordinate.h"
-#include "glwindow.h"
-#include "mainwindow.h"
-#include "imageframe.h"
-#include "animationframe.h"
+
+class MainWindow;
+class ImageFrame;
+class AnimationFrame;
+class GLWindow;
 
 /**
  * @brief The Canvas class
@@ -76,13 +77,13 @@ private:
      * @brief mouseMoveEvent Mouse moved event
      * @param event event
      */
-    void mouseMoveEvent(QMouseEvent * event);
+    void mouseMoveEvent(QMouseEvent *event);
 
     /**
      * @brief mousePressEvent Mouse Pressed event
      * @param event event
      */
-    void mousePressEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent *event);
 
     MainWindow *mMainW;
     GLWindow *mWin;

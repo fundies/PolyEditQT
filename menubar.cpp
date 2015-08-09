@@ -1,4 +1,6 @@
 #include "menubar.h"
+#include "qactions.h"
+#include "mainwindow.h"
 
 MenuBar::MenuBar(MainWindow *parent) : QMenuBar(parent)
 {

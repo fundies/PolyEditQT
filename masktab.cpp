@@ -1,23 +1,23 @@
-#include "masktab.h"
-
 #include <QPushButton>
-#include <iostream>
-#include <QDebug>
+#include <QTabBar>
 
-MaskTab::MaskTab(MainWindow *parent, Canvas* canvas) : QTabWidget(parent)
+#include "masktab.h"
+#include "maskwidget.h"
+#include "mainwindow.h"
+
+MaskTab::MaskTab(MainWindow *parent, Canvas *canvas) : QTabWidget(parent)
 {
     numMask = 0;
     deleting = false;
 
-    mTable = new QList<Table*>();
+    mTable = new QList<Table *>();
 
     mParent = parent;
     mCanvas = canvas;
 
     setTabsClosable(true);
-    //setMovable(true);
 
-    MaskWidget* widget = new MaskWidget(this, mCanvas);
+    MaskWidget *widget = new MaskWidget(this, mCanvas);
     widget->setName("Mask 0");
     QTabWidget::insertTab(0, widget, "Mask 0");
     mTable->append(widget->table());
@@ -39,12 +39,12 @@ MaskTab::~MaskTab()
     //delete mTable;
 }
 
-void MaskTab::addTab(Table* table)
+void MaskTab::addTab(Table *table)
 {
     numMask++;
     QString name = "Mask " + QString::number(numMask);
 
-    MaskWidget* widget = new MaskWidget(this, mCanvas, table);
+    MaskWidget *widget = new MaskWidget(this, mCanvas, table);
     widget->setName(name);
     QTabWidget::insertTab(count()-1, widget, name);
     mTable->append(widget->table());
@@ -57,7 +57,7 @@ void MaskTab::addTab()
     numMask++;
     QString name = "Mask " + QString::number(numMask);
 
-    MaskWidget* widget = new MaskWidget(this, mCanvas);
+    MaskWidget *widget = new MaskWidget(this, mCanvas);
     QTabWidget::insertTab(count()-1, widget, name);
     widget->setName(name);
     mTable->append(widget->table());
@@ -66,14 +66,14 @@ void MaskTab::addTab()
 void MaskTab::closeTab(int index)
 {
     deleting = true;
-    mTable->removeAll(static_cast<MaskWidget*>(widget(index))->table());
+    mTable->removeAll(static_cast<MaskWidget *>(widget(index))->table());
     removeTab(index);
 
     if(count() <= 1)
     {
         addTab();
         setCurrentIndex(0);
-        mParent->setMask(static_cast<MaskWidget*>(currentWidget())->table());
+        mParent->setMask(static_cast<MaskWidget *>(currentWidget())->table());
     }
 }
 
@@ -84,38 +84,38 @@ void MaskTab::currentChanged(int index)
     {
         addTab();
         setCurrentIndex(count()-2);
-        mParent->setMask(static_cast<MaskWidget*>(currentWidget())->table());
+        mParent->setMask(static_cast<MaskWidget *>(currentWidget())->table());
     }
     else if (deleting)
     {
         setCurrentIndex(0);
         deleting = false;
-        mParent->setMask(static_cast<MaskWidget*>(currentWidget())->table());
+        mParent->setMask(static_cast<MaskWidget *>(currentWidget())->table());
     }
 }
 
 
-QList<Table*> *MaskTab::table() const
+QList<Table *> *MaskTab::table() const
 {
     return mTable;
 }
 
-QTabBar* MaskTab::tabBar()
+QTabBar *MaskTab::tabBar()
 {
     return QTabWidget::tabBar();
 }
 
-Table* MaskTab::currentTable()
+Table *MaskTab::currentTable()
 {
-    return static_cast<MaskWidget*>(currentWidget())->table();
+    return static_cast<MaskWidget *>(currentWidget())->table();
 }
 
 void MaskTab::replaceCurrentTable(Table *t)
 {
     int current = currentIndex();
-    QString name = static_cast<MaskWidget*>(currentWidget())->name();
+    QString name = static_cast<MaskWidget *>(currentWidget())->name();
 
-    MaskWidget* widget = new MaskWidget(this, mCanvas, t);
+    MaskWidget *widget = new MaskWidget(this, mCanvas, t);
     widget->setName(name);
     deleting = true;
     QTabWidget::removeTab(current);
@@ -130,7 +130,7 @@ void MaskTab::clear()
 
     QTabWidget::clear();
 
-    MaskWidget* widget = new MaskWidget(this, mCanvas);
+    MaskWidget *widget = new MaskWidget(this, mCanvas);
     widget->setName("Mask 0");
     QTabWidget::insertTab(0, widget, "Mask 0");
     mTable->append(widget->table());

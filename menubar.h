@@ -2,7 +2,8 @@
 #define MENUBAR_H
 
 #include <QMenuBar>
-#include "mainwindow.h"
+
+class MainWindow;
 
 /**
  * @brief The MenuBar class
@@ -14,15 +15,16 @@ public:
      * @brief MenuBar constructor
      * @param parent parent
      */
-    MenuBar(MainWindow* parent);
+    MenuBar(MainWindow *parent);
 
     ~MenuBar();
 
 private:
-    QMenu* fileMenu;
-    QMenu* editMenu;
-    QMenu* viewMenu;
-    QMenu* helpMenu;
+
+    QMenu *fileMenu;
+    QMenu *editMenu;
+    QMenu *viewMenu;
+    QMenu *helpMenu;
 };
 
 #endif // MENUBAR_H
