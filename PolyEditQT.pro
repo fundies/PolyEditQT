@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl xml
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     animationmenu.cpp \
     yesnowidget.cpp \
     svgreader.cpp \
-    aboutframe.cpp
+    aboutframe.cpp \
+    shapes.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \

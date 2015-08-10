@@ -63,6 +63,7 @@ ImageFrame::ImageFrame(MainWindow *parent, QImage &image) : GLWindow(parent)
 
 void ImageFrame::import()
 {
+    mSpr->genSubimg(mSpnRows, mSpnColumns, mSpnX, mSpnY);
     mParent->setSprite(mSpr);
     close();
 }

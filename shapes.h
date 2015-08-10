@@ -2,6 +2,9 @@
 #define SHAPES_H
 
 #include <QString>
+#include <QOpenGLFunctions>
+
+#include "coordinate.h"
 
 /**
  * Shapes enum
@@ -24,6 +27,19 @@ namespace PolyEdit
     Shape hashit (QString const &inString);
 }
 
+class Circle : protected QOpenGLFunctions
+{
+public:
+
+    /**
+     * @brief drawCircle draw a circle
+     * @param c center
+     * @param radius raidius
+     * @param steps steps
+     * @param outline outline or fill
+     */
+    static void drawCircle(Coordinate c, int radius, int steps, bool outline);
+};
 
 #endif // SHAPES_H
 

@@ -4,17 +4,6 @@
 #include <QFile>
 #include <QXmlStreamWriter>
 
-namespace PolyEdit
-{
-    Shape hashit (QString const &inString)
-    {
-        if (inString == "polyline") return Polygon;
-        if (inString == "circle") return Circle;
-        if (inString == "rect") return Box;
-        return Invalid;
-    }
-}
-
 Mask::Mask(QOpenGLWidget *parent)
 {
     mParent = parent;
@@ -79,7 +68,7 @@ void Mask::render()
         int steps = 30;
 
         for (auto i : mcs)
-            drawCircle(Coordinate(i.rx() * xscale, -i.ry() * yscale), 5, steps, false);
+            Circle::drawCircle(Coordinate(i.rx() * xscale, -i.ry() * yscale), 5, steps, false);
     }
 
     // Reset to white
@@ -93,12 +82,12 @@ void Mask::render(Coordinate mousePos)
     if (mType == PolyEdit::Circle && !mcs.empty())
     {
         Coordinate c = Coordinate(mcs[0].rx() * xscale, -mcs[0].ry() * yscale); //reverse y axis
-        drawCircle(c, 5, 30, false); // Origin
+        Circle::drawCircle(c, 5, 30, false); // Origin
 
         if (mRadius == 0)
-            drawCircle(c, distance(Coordinate(c.rx(), -c.ry()), mousePos * xscale), 30, true);
+            Circle::drawCircle(c, distance(Coordinate(c.rx(), -c.ry()), mousePos * xscale), 30, true);
         else
-            drawCircle(c, mRadius * xscale, 30, true);
+            Circle::drawCircle(c, mRadius * xscale, 30, true);
     }
 
     if (mType == PolyEdit::Box && !mcs.empty())
@@ -136,7 +125,7 @@ void Mask::render(Coordinate mousePos)
 
             // Draw the orgin too
             Coordinate origin = Coordinate(x * xscale, y * yscale);
-            drawCircle(origin, 5, 30, false);
+            Circle::drawCircle(origin, 5, 30, false);
         }
 
         glBegin(GL_LINE_STRIP);

@@ -135,4 +135,3 @@ void Canvas::mousePressEvent(QMouseEvent *event)
             mMainW->addCoord(mMainW->getStatusCoord());
     }
 }
-

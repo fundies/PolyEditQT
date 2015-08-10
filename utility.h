@@ -26,15 +26,6 @@ int getFactor(int number);
 bool compareDouble(double a, double b);
 
 /**
- * @brief drawCircle draw a circle
- * @param c center
- * @param radius raidius
- * @param steps steps
- * @param outline outline or fill
- */
-void drawCircle(Coordinate c, int radius, int steps, bool outline);
-
-/**
  * @brief distance distance between two points
  * @param c1 coordinate 1
  * @param c2 coordinate 2

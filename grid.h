@@ -1,12 +1,14 @@
 #ifndef GRID_H
 #define GRID_H
 
+#include <QOpenGLFunctions>
+
 #include "coordinate.h"
 
 /**
  * @brief The Grid class
  */
-class Grid
+class Grid : protected QOpenGLFunctions
 {
 public:
 

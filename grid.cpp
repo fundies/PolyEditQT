@@ -1,5 +1,3 @@
-#include <QGLWidget>
-
 #include "grid.h"
 
 Grid::Grid(int xSep, int ySep, int canvasW, int canvasH)
@@ -127,6 +125,9 @@ void Grid::setSize(unsigned int width, unsigned int height, unsigned int rows, u
 
 void Grid::render()
 {
+
+    initializeOpenGLFunctions();
+
     // Alpha
     glEnable (GL_BLEND);
 

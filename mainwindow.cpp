@@ -135,7 +135,7 @@ void MainWindow::render()
     }
 
     setStatusCoord(mapToGrid(Coordinate(x,y)));
-    std::function<void(void)> c = std::bind(drawCircle, Coordinate(x,y), 5, 30, false);
+    std::function<void(void)> c = std::bind(Circle::drawCircle, Coordinate(x,y), 5, 30, false);
     mCanvas->draw(c, 0, 0);
 }
 
