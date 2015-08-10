@@ -4,13 +4,14 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml
+QT  += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = PolyEditQT
 TEMPLATE = app
 
+win32:INCLUDEPATH += $$_PRO_FILE_PWD_/libs/include
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -73,12 +74,9 @@ HEADERS  += mainwindow.h \
 
 CONFIG += c++11
 
-QMAKE_LFLAGS += -lGLU
-
-DISTFILES +=
-
 RESOURCES += \
     images.qrc \
     lisence.qrc
 
+win32:LIBS+=-L$$_PRO_FILE_PWD_/libs/lib -lOpengl32
 LIBS +=  -lz -lquazip5

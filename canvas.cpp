@@ -1,4 +1,3 @@
-#include <GL/glu.h>
 #include <QMouseEvent>
 
 #include "glwindow.h"
@@ -82,7 +81,7 @@ void Canvas::paintGL()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluOrtho2D(0, width(), height(), 0);
+    glOrtho(0, width(), height(), 0, 1, -1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
