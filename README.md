@@ -6,8 +6,6 @@ PolyEdit is a GUI mask editor. Open your image of choice and begin tracing. All 
 
 Windows Release: http://gtgames.org/PolyEdit/release.zip
 
-Windows Debug: http://gtgames.org/PolyEdit/release.zip
-
 ## Requirements
 
 Qt5 http://www.qt.io/
