@@ -1,20 +1,25 @@
 ## Synopsis
 
 ![PolyEdit Logo](http://gtgames.org/PolyEdit/icon.png)
+
 PolyEdit is a GUI mask editor. Open your image of choice and begin tracing. All masks are exported as SVG (scalable vector graphics) for use within other software. For convience images and masks are stored together in zip archives.
 
 Windows Release: http://gtgames.org/PolyEdit/release.zip
+
 Windows Debug: http://gtgames.org/PolyEdit/release.zip
 
 ## Requirements
 
 Qt5 http://www.qt.io/
+
 Quazip http://quazip.sourceforge.net/
 
 ## Building
 
 Download all required dependencies
+
 qmake
+
 make
 
 ## Contributors
